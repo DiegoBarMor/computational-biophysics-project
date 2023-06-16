@@ -26,6 +26,190 @@
       </nav>
 
       <div class="contents"> <h1>General Analysis</h1>
+        <p>
+          The source code for the general, detailed and solvent analysis is found in the folder <code>src_analysis/</code>. It contains scripts for both calculation and visualization of the results. Numerical results are stored in a folder created while executing <code>src_md/3_POST.sh</code>, called <code>data_analysis</code>.
+        </p>
+
+        <h2>RMSD</h2>
+          <p>
+            From the trajectories visualized in VMD it can be seen how the protein fluctuates during its evolution in water. The first frame, which is the PDB file taken from crystallographic experiments, represents the protein in a structure far from equilibrium. During its evolution, the system should move towards a minimum of the free energy, and reach more stable configurations. We wonder if the system reaches an equilibrium configuration, and if there are some transitions from a metastable configuration to another. To explore this behaviour we can calculate the <b>root mean square deviation (RMSD)</b> for each trajectory. The RMSD between two frames is defined as
+
+            $$RMSD(\Delta t) = \sqrt{\frac{1}{N}\sum_{i=1}^{N}(x_{i}(\Delta t)-x_{i}(0))^{2}}$$
+
+            where
+            <ul>
+              <li>$N$ is the number of atoms in the protein</li>
+              <li>$\Delta t$ is the time step</li>
+              <li>$x_{i}(\Delta t)$ is the position of atom $i$ at time $\Delta t$</li>
+            </ul>
+
+            It is important to remember that this quantity is only an indicator of the stability of the system. If a plateau is reached it means that the protein can be at equilibrium, but it important to notice that this is not always the case. Furthermore, before calculating the RMSD it is necessary to perform an alignment between the structures. In our case, this was performed in the post-processing described before.
+          </p>
+
+          <h3>RMSD calculation</h3>
+            <p>
+              Calculating a RMSD map of <code>6000 x 6000</code> frames is computationally expensive. Firstly, one must consider that large XTC files are opened as a stream (loading just the frame needed for a given operation) instead of loading all frames in memory. This means that, when calculating the RMSD matrix, the XTC "reading window" should shift from start to finish multiple times to load the required frames, which is highly demanding.
+            </p>
+
+            <p>
+              Considering this, the function <code>calculate_general.extract_ca_coords</code> was defined. It iterates over the XTC once, assigning the coordinates of the backbone carbon alpha atoms for each frame into a numpy array, then saving the whole array in <code>data_analysis/general</code>. This data structure is much lighter and can be loaded into memory for any method that requires using the backbone positions of the protein.
+            </p>
+
+            <p>
+              Furthermore, as the RMSD matrix is symmetric, the function <code>calculate_general.calc_rmsd</code> calculates only half of the matrix, and then assigns the other half in a specular manner. This structure is also stored in <code>data_analysis/general</code>, to avoid calculating the RMSD each time a different visualization is performed. This idea of pre-calculation is also applied for other subsequent analysis methodologies.
+            </p>
+
+          <h3>RMSD visualization - 1D</h3>
+            <p>
+              A frame from the trajectory can be taken as a reference point for the RMSD with other frames, as a means of general comparison between conformations and their evolution. By taking the respective row from the RMSD matrix, a fixed 1D representation can be obtained. The classes <code>RMSD_visualize.RMSD_1D</code> and <code>RMSD_visualize.RMSD_1D_Compare</code> were defined with this purpose in mind (the latter allows for plotting two RMSD lines simultaneously).
+            </p>
+
+            <p>
+              In the following plots, the RMSD is visualized with respect to the initial frame, to estimate if the proteins reach an equilibrium during the evolution of the system (i.e. a plateau on RMSD values with respect to the original structure). Furthermore, each plot contains both simulation repetitions, which allows to directly compare them. In general, the noise is quite high, and it is not straightforward to identify the stable or equilibrium regions on the plots.
+
+              <figure><img src="figures/2_GeneralAnalysis/RMSD1D-mt1.png", alt="RMSD1D-mt1.png"></figure>
+
+              The first system, <code>mt1</code>, presents large differences in its RMSD values. An important disturbance seems to occur around frame 900 for <code>rep0</code> (but not for <code>rep1</code>) and a change in the trend of configurations can be noticed. Always in <code>rep0</code> we observe an equilibrium region approximately between frame 2100 and frame 3800. However, before frame 2000 an extremely noisy region occurs, and after frame 4000 it seems that the configuration of the protein changes. Meanwhile, in <code>rep1</code> the RMSD fluctuates around a constant value and is much less noisy than the <code>rep0</code> one. The only relevant change occurs between frame 2000 and frame 3000, which might be a slight conformational change.
+            </p>
+
+            <p>
+              All classes inherited by <code>RMSD_visualize.RMSD_1D</code> also allow to "slide" the reference frame in an interactive manner. This allows for a better understanding of the whole RMSD matrix, as exemplified bellow.
+
+              <figure><img src="animations/2_GeneralAnalysis/RMSD1D-mt1.gif", alt="RMSD1D-mt1.gif"></figure>
+
+              The <code>rep1</code> values slightly oscillate around a constant value, while the values for the <code>rep0</code> show a more dynamic trend. It can be observed that when the reference frame is approximately between frame 2100 and frame 5000 the two RMSD tend to coincide in the central region. In general, the stability of this system is doubtful, so observing its wild-type analogous <code>wt1</code> perhaps provides more information.
+
+              <figure><img src="figures/2_GeneralAnalysis/RMSD1D-wt1.png", alt="RMSD1D-wt1.png"></figure>
+
+              The RMSD of <code>rep0</code> is quite low and it seems to oscillate around a constant value. It seems that no major changes of configuration occur. On the other side, the RMSD of <code>rep1</code> undergoes several changes. At frame 800 it changes abruptly, perhaps consequence of a similar disturbance as suffered by mt1_rep0. Until frame 4000 it seems that the protein stays in the same equilibrium configuration, only to then present extreme changes on the RMSD values.
+            </p>
+
+            <p>
+              Overall, the system with only one subunit seems to be highly unstable, sometimes apparently reaching equilibrium quickly while other times undergoing extreme changes because of slight perturbations. This is most likely related to the fact that this system does not operate in nature, as the protein is expected to be constituted by two monomers. Perhaps this is so because having two monomers provides structural stability to the polypeptides, and could explain why this is the form found in nature. Effectively, when checking the evolution of the dimeric systems (<code>wt2</code>, <code>mt2</code>), a higher stability is observed:
+
+              <figure>
+                <div class="d-flex flex-row fig_hscroll">
+                  <img class="col px-2 img_rw100" src="figures/2_GeneralAnalysis/RMSD1D-wt2.png", alt="RMSD1D-wt2.png">
+                  <img class="col px-2 img_rw100" src="figures/2_GeneralAnalysis/RMSD1D-mt2.png", alt="RMSD1D-mt2.png">
+                </div>
+                <div class="row">
+                  <figcaption class="text-center"> [TODO] caption. 2 plots, scroll horizontally! </figcaption>
+                </div>
+              </figure>
+
+              It is noticeable how stable the <code>wt2</code> system is with respect to the other trajectories. However, this should not be a surprise, as this system is the wild-type dimeric form prevalent in nature. The <code>mt2</code> system is also quite stable, with seemingly only one relevant conformational change in both runs. This change occurs between frame 4000 and 6000, and, as it comes from the mutated system and its explanation is not evident, will be further analysed in <a href="https://diegobarqueromorera.github.io/computational-biophysics-project/analysis-detailed.html">Detailed Analysis</a>.
+            </p>
+
+          <h3>RMSD visualization - 2D</h3>
+            <p>
+              It is also possible to build a RMSD matrix and represent it using an heatmap. The RMSD graphs represented above correspond to the first row in the respective matrix. These matrices are symmetric, and the values on the diagonal are $0$.
+
+              <figure><img src="figures/2_GeneralAnalysis/RMSD2D-mt1.jpg", alt="RMSD2D-mt1.jpg"></figure>
+
+              In <code>rep0</code> map it seems a change in configuration occurs around frame 800. Other changes in configuration occur but the contrast is lower. In <code>rep1</code> map the contrast is much lower, meaning that the protein does not undergoes major changes in its configurations. It is interesting to observe that two changes in the protein structure occur around frame 2500. In the 1D graph we could not grasp this information, because the RMSD are noisy.
+
+              <figure><img src="figures/2_GeneralAnalysis/RMSD2D-mt2.jpg", alt="RMSD2D-mt2.jpg"></figure>
+
+              In <code>rep0</code> only a change in the configuration occur around frame 5500. In <code>rep1</code> several changes occurs, and the value of RMSD is in general higher than the ones in <code>rep0</code>.
+
+              <figure><img src="figures/2_GeneralAnalysis/RMSD2D-wt1.jpg", alt="RMSD2D-wt1.jpg"></figure>
+
+              Here we observe two deeply different behaviours in the RMSD. In <code>rep0</code> the values are substantially constant and it seems that no important changes in the configuration occur. In <code>rep1</code> a clear change in the configuration occurs around frame 4000.
+
+              <figure><img src="figures/2_GeneralAnalysis/RMSD2D-wt2.jpg", alt="RMSD2D-wt2.jpg"></figure>
+
+              The RMSD values in both repetitions seems to be similar. In <code>rep1</code> a change in conformation seems to occur around frame 3000.
+            </p>
+
+
+        <h2>RMSF</h2>
+          <p>
+              The protein is composed of many atoms which move during the evolution of the system. To understand which parts of the protein are more mobile it is useful to calculate the root mean square fluctuations for each atom.  The RMSF related to atom $i$ is defined as:
+
+              $$ RMSF_{i} = \sqrt{<\Delta \vec{r_{i}}>^{2}} $$
+
+              where $<\Delta \vec{r_{i}}>$ is the mean deviation of the atom from its equilibrium position.
+          </p>
+
+          <p>
+            In the graphs below it can be seen that some atoms have a larger RMSF, meaning that they are more mobile during the evolution of the protein.
+
+            <figure>
+              <div class="d-flex flex-row fig_hscroll">
+                <img class="col px-2 img_rw100" src="figures/2_GeneralAnalysis/RMSF-mt1.png", alt="RMSF-mt1.png">
+                <img class="col px-2 img_rw100" src="figures/2_GeneralAnalysis/RMSF-mt2.png", alt="RMSF-mt2.png">
+              </div>
+              <div class="row">
+                <figcaption class="text-center"> [TODO] caption. 2 plots, scroll horizontally! </figcaption>
+              </div>
+            </figure>
+
+            The RMSF values for <code>rep0</code> are in general larger than the values calculated for <code>rep1</code>. This means that the atoms oscillate more around their equilibrium position in <code>rep0</code> than in <code>rep1</code>.
+          </p>
+
+          <p>
+            The RMSF graphs are compatible with the RMSD ones. Regarding <code>rep0</code>, we can observe non constant regions, which could correspond to changes in the conformation of the protein. In these regions, the atoms are expected to move more, than we expect an higher value of the RMSF. On the other hand, the RMSD values calculated for <code>rep1</code> seem to oscillate around a constant value. This means that probably conformational changes do not occur, then the atoms are expected to slightly move around their equilibrium position.
+
+            <figure><img src="figures/2_GeneralAnalysis/RMSF-mt1_rep0-mt2_rep0.png", alt="RMSF-mt1_rep0-mt2_rep0.png"></figure>
+
+            Here we compare the RMSF of the whole protein with the one computed for only a subunit. In this way we can explore how the fluctuations of atoms in a given subunit are correlated to the fluctuations in the other subunit. We observe that for the protein with two subunits the RMSF is lower than the one calculate for one subunit alone. This means that the system with two subunits is more stable than the system with only one subunit.
+
+            <figure>
+              <div class="d-flex flex-row fig_hscroll">
+                <img class="col px-2 img_rw100" src="figures/2_GeneralAnalysis/RMSF-wt1.png", alt="RMSF-wt1.png">
+                <img class="col px-2 img_rw100" src="figures/2_GeneralAnalysis/RMSF-wt2.png", alt="RMSF-wt2.png">
+              </div>
+              <div class="row">
+                <figcaption class="text-center"> [TODO] caption. 2 plots, scroll horizontally! </figcaption>
+              </div>
+            </figure>
+
+            <figure><img src="figures/2_GeneralAnalysis/RMSF-wt1_rep0-wt2_rep0.png", alt="RMSF-wt1_rep0-wt2_rep0.png"></figure>
+            <figure><img src="figures/2_GeneralAnalysis/RMSF-mt2_rep0-wt2_rep0.png", alt="RMSF-mt2_rep0-wt2_rep0.png"></figure>
+          </p>
+
+
+        <h2>Radius of Gyration</h2>
+          <p>
+            From VMD it can be observed that even though the protein fluctuates, its shape remains constant. To check if the protein elongates during its evolution it is useful to calculate the radius of gyration:
+
+            $$ RGYR(\Delta t) = \sqrt{\frac{\sum_{i=1}^{N}m_{i}(r_{i}(\Delta t)-R_{cm})^{2}}{\sum_{i=1}^{N} m_{i}}}$$
+
+            where
+            <ul>
+              <li>$m_{i}$ is the mass of atom $i$</li>
+              <li>$r_{i}$ is the position of atom $i$ at time $\Delta t$</li>
+              <li>$R_{cm}$ is the center of mass</li>
+            </ul>
+
+            In the following graphs we present the radii of gyration for the four system. The noise is large, then few assumptions can be done as regard the compatibility between the two sets of data and the configurational changes of the protein. The RMSF computed for <code>rep0</code> and <code>rep1</code> seem to agree more for $mt2$ and $wt2$, then for the evolution for the whole protein. This could mean that a single subunit is less stable than two subunits linked together.
+
+            <figure><img src="figures/2_GeneralAnalysis/RGYR-mt1.png", alt="RGYR-mt1.png"></figure>
+
+            The radius of gyration, RGYR, for <code>rep0</code> presents a peak around frame 900, and two local maxima around frame 2000 and frame 4000. A non constant RGYR could mean that the protein is changing shape, then it is compatible with a change of the configuration. The RGYR for <code>rep1</code> oscillates around $220nm$ and it slightly increases between frame 1000 and frame 3800. In this interval it is possible that occurs a conformational change.
+
+            <figure><img src="figures/2_GeneralAnalysis/RGYR-mt2.png", alt="RGYR-mt2.png"></figure>
+
+            The values of the RGYR are extremely noisy, then it is quite difficult to understand if a change of conformation occurs. In <code>rep1</code> a peak is observed around frame 4800, and in <code>rep0</code> the same peak occurs around frame 5500. We think that the protein assumes the similar configurations around frame 4800 and 5500.
+
+            <figure><img src="figures/2_GeneralAnalysis/RGYR-wt1.png", alt="RGYR-wt1.png"></figure>
+
+            The values of the RGYR quite agree approximately until frame 1800 and starting from frame 5500 to the end. Starting from frame 2000 the RGYR of <code>rep1</code> increases and reaches a peak around frame 4000.
+
+            <figure><img src="figures/2_GeneralAnalysis/RGYR-wt2.png", alt="RGYR-wt2.png"></figure>
+
+            The RGYR of the two repetitions quite agree, it seems they both evolve with a sinusoidal trend.
+          </p>
+
+
+        <h2>Contact Map</h2>
+          <p>
+            The protein is constituted by a folded chain composed of atoms linked together. Non subsequent atoms can be near enough to interact even if they are not adjacent. The contact maps shows the links between atoms only for a single frame, and a more detailed analysis of interactions in the protein is performed in the following part of this work. The contact map is defined in 2D, then it is not possible to overlap the graphs as we did for RMSF, RMSD and RGYR. Here we show as an example a contact maps calculated at the initial frame of the trajectory. The initial frame is the same for the two trajectories, namely rep0 and rep1, then the contact map results to be the same.
+
+            <figure><img src="figures/2_GeneralAnalysis/CMAP-mt1mt2.jpg", alt="CMAP-mt1mt2.jpg"></figure>
+
+            The darkest parts represent the regions in which there is more contact between the residues, while the brightest parts correspond to the regions in which there is less contact. In the contact map on the right a discontinuous line in the indicates the region in which the first subunit ends and the second one begins. It can be observed that the map is symmetric, and for the whole protein the pattern is repeated two times along the main diagonal.
+          </p>
 
 
       </div>
