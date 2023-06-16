@@ -27,6 +27,204 @@
 
       <div class="contents"> <h1>Molecular Dynamics</h1>
 
+        <h2>Input preparation</h2>
+          <p>
+            The original PDB files for both <a href="https://www.rcsb.org/structure/8DFN">mutated</a> and <a href="https://www.rcsb.org/structure/7SI9">wild</a> types were obtained from the PDB website. The chosen PDB wild-type entry contained an additional ligand, which was manually removed from the file. These two PDB structures were then given as input to the <code>Input Generator</code> tool from <a href="www.charmm-gui.org">Charmm-gui</a>. This tool produces the input files for the different simulations, namely by:
+
+            <ul>
+              <li>Constructing the simulation box.</li>
+              <li>Adding water and ions into the system.</li>
+            </ul>
+
+            The workflow changes slightly at the beginning of the process for each system. It is described below:
+
+            <table class="tg">
+            <thead><tr>
+              <th class="tg-nrix">Step</th>
+              <th class="tg-nrix">mt2 input files</th>
+              <th class="tg-nrix">mt1 input files</th>
+              <th class="tg-nrix">wt2 input files</th>
+              <th class="tg-nrix">wt1 input files</th>
+            </tr></thead>
+            <tbody>
+              <tr>
+                <td class="tg-nrix">1</td>
+                <td class="tg-nrix" colspan="2">
+                  <a href="https://www.charmm-gui.org/">www.charmm-gui.org</a> $\rightarrow$ <i>Input Generator</i> $\rightarrow$ <i>Solution Builder</i> $\rightarrow$ <i>Download PDB File:</i> <code>8DFN</code>
+                </td>
+                <td class="tg-nrix" colspan="2">
+                  <a href="https://www.charmm-gui.org/">www.charmm-gui.org</a> $\rightarrow$ <i>Input Generator</i> $\rightarrow$ <i>Solution Builder</i> $\rightarrow$ <i>Upload PDB File:</i> <code>7si9_modified.pdb</code>. Select <b>Check/Correct PDB Format</b>
+                </td>
+              </tr>
+              <tr>
+                <td class="tg-nrix">2</td>
+                <td class="tg-nrix">Select both <code>PROA</code> and <code>PROB</code></td>
+                <td class="tg-nrix">Select only <code>PROA</code></td>
+                <td class="tg-nrix">Select both <code>PROA</code> and <code>PROB</code></td>
+                <td class="tg-nrix">Select only <code>PROA</code></td>
+              </tr>
+              <tr>
+                <td class="tg-nrix">3</td>
+                <td class="tg-nrix" colspan="4">Select <b>Terminal group patching</b> and <b>Model missing residues</b> (select as well the respective residues to model).</td>
+              </tr>
+              <tr>
+                <td class="tg-nrix">4: <b>Solvator</b></td>
+                <td class="tg-nrix" colspan="4">
+                  <i>Waterbox Size Options</i> $\rightarrow$ <i>Specify Waterbox Size</i> $\rightarrow$ <code>X,Y,Z = 105</code> <br>
+                  <i>Add Ions</i> $\rightarrow$ Ion Placing Method: Monte-Carlo <br>
+                  <i>Basic Ion Types</i>: NaCl $\rightarrow$ <i>Add Simple Ion Type</i> (Concentration: 0.15, Neutralizing) <br>
+                  Remove the default KCl
+                </td>
+              </tr>
+              <tr>
+                <td class="tg-nrix"><small>solvent composition should be:</small></td>
+                <td class="tg-nrix">$101 Na^+$, $93 Cl^-$</td>
+                <td class="tg-nrix">$103 Na^+$, $99 Cl^-$</td>
+                <td class="tg-nrix">$101 Na^+$, $93 Cl^-$</td>
+                <td class="tg-nrix">$102 Na^+$, $99 Cl^-$</td>
+              </tr>
+              <tr>
+                <td class="tg-nrix">5: <b>PBC Setup</b></td>
+                <td class="tg-nrix" colspan="4"><i>Periodic Boundary Condition Options</i> $\rightarrow$ <i>Generate grid information for PME FFT automatically</i></td>
+              </tr>
+              <tr>
+                <td class="tg-nrix">6: <b>Input Generator</b></td>
+                <td class="tg-nrix" colspan="4">
+                  <i>Force Field Options</i> $\rightarrow$ <i>CHARMM36m</i> <br>
+                  <i>Input Generation Options</i> $\rightarrow$ <i>GROMACS</i> <br>
+                  <i>Dynamics Input Generation Options</i> $\rightarrow$ <i>Temperature 310 K</i>
+                </td>
+              </tr>
+            </tbody>
+            </table>
+          </p>
+
+
+        <h2>Molecular Dynamics Simulation</h2>
+          <p>
+            The outcome of the previous step is provided in this repository, separated in 4 folders inside <code>data_md/</code>. The parameters for the following steps are also provided in <code>data_md/_params/</code>. The source files for the following steps can also be found in <code>src_md/</code>. It is required to set this as the current working directory before attempting to execute any of the scripts.
+          </p>
+
+          <h3>Step 0: Energy Minimization</h3>
+            <p>
+              At this point the system is complete but the protein is still in a high energy configuration. Hence it is necessary to find the configuration associated to the minimum value of the energy and then let it evolve. This is known as <b>energy minimization</b>. The protein is allowed to explore many configurations to find the one associated to a minimum value of the molecular energy.
+            </p>
+
+            <p>
+              Parameters employed:
+              <ul>
+                <li><b>Integrator</b>: <code>steepest descent</code></li>
+                <li><b>Energy minimization threshold</b>: $400$</li>
+                <li><b>Integrator step</b>: $0.01$</li>
+                <li><b>Maximum number of steps</b>: $5000$</li>
+              </ul>
+
+              For running this step, it's necessary to submit <code>0_EM.pbs</code> as a job (or run locally an equivalent <code>.sh</code> script) only once.
+            </p>
+
+          <h3>NVT and NPT equilibration</h3>
+            <p>
+              For further stabilizing the initial state of the system, the next steps consist of finding the volume and the pressure values which correspond to the minimum of the molecular energy of the protein. For running this step, it's necessary to submit <code>1_NVT_NPT.pbs</code> as a job (or run locally an equivalent <code>.sh</code> script) only once.
+            </p>
+
+            <h4>NVT</h4>
+              <p>
+                Here, the volume is fixed, and the pressure slightly changes until the minimum energy configuration is found. The value of the pressure which corresponds to the minimum energy configuration will be employed in the following step.
+              </p>
+
+              <p>
+                Parameters employed:
+
+                <ul>
+                  <li><b>Integrator </b>: <code>molecular dynamics</code></li>
+                  <li><b>Temperature </b>: $310 K$</li>
+                  <li><b>Number of steps </b>: $250000$</li>
+                  <li><b>Time step </b>: $0.002 ps$</li>
+                </ul>
+
+                The total time of the molecular dynamics evolution is of $250000 \times 0.002 ps = 0.5 ns$.
+              </p>
+
+            <h4>NPT</h4>
+              <p>
+                Here, the volume slightly changes, until the configuration which corresponds to the minimum energy is found.
+              </p>
+
+              <p>
+                Parameters employed:
+
+                <ul>
+                  <li><b>Integrator </b>: <code>molecular dynamics</code></li>
+                  <li><b>Temperature </b>: $310 K$</li>
+                  <li><b>Number of steps </b>: $500000$</li>
+                  <li><b>Time step </b>: $0.002 ps$</li>
+                </ul>
+
+                The total time of the molecular dynamics evolution is of $500000 \times 0.002 ps = 1 ns$.
+              </p>
+
+          <h3>Unrestrained Molecular Dynamics</h3>
+            <p>
+              At this point we can proceed with the unrestrained MD simulation.
+            </p>
+
+            <p>
+              Parameters employed:
+
+              <ul>
+                <li><b>Integrator </b>: <code>molecular dynamics</code></li>
+                <li><b>Temperature </b>: $310 K$</li>
+                <li><b>Number of steps </b>: $150000000$</li>
+                <li><b>Time step </b>: $0.002 ns$</li>
+              </ul>
+
+              The total time of the molecular dynamics evolution is of $150000000 \times 0.002 ps = 300 ns$. For running this step, a script called <code>2_MD.sh</code> is provided, which simplifies the process of submitting multiple jobs to the cluster. This script needs to be executed multiple times until the simulations reach the desired amount of steps.
+            </p>
+
+            <h4>Benchmarking</h4>
+            <p>
+              Given the large amount of integration steps required for this phase, it is pertinent to perform a benchmark to better choose the appropriate amount of computational resources needed (i.e. cores). For this project, the MD simulation was performed on high performance CPUs available in cluster of the university.
+            </p>
+
+            <p>
+              The benchmark process for choosing the right amount of cores is as following. The unrestrained MD was performed with a walltime of $10$ and $30$ minutes. We also repeated the benchmarks two times for each walltime. We noticed that the efficiency obtained with the same number of cores and walltime was not constant. This is probably due to the simulation running on different cores every time, which might have different performances.
+            </p>
+
+            <p>
+              In the two graphs below it is shown, as an example, the benchmark performed for the NVT equilibration. It can be easily observed that the nanoseconds in the simulation processed in a day, in $ns/day$, and the efficiency, in $h/ns$ then the hours to perform a nanosecond of simulation,depend on the wall time. It can be also observed that the outcomes obtained for different repetions are different.
+            </p>
+
+            <figure>
+              <div class="d-flex flex-row fig_hscroll">
+                <img class="col px-2 img_rw100" src="figures/1_MD/benchmark_nvt_10_30_h_ns.png", alt="benchmark_nvt_10_30_h_ns.png" class="fig_rw100">
+                <img class="col px-2 img_rw100" src="figures/1_MD/benchmark_nvt_10_30_ns_day.png", alt="benchmark_nvt_10_30_ns_day.png">
+              </div>
+              <div class="row">
+                <figcaption class="text-center"> [TODO] caption. 2 plots, scroll horizontally! </figcaption>
+              </div>
+            </figure>
+
+        <h2>Post processing</h2>
+          <p>
+            If the resulting <code>md_plain.xtc</code> trajectories are observed, it is evident that they need further processing before analysing them. The script <code>3_POST.sh</code> is provided to deal with this. This is how the trajectories behave originally:
+
+            <figure><img src="animations/1_MD/0_plain.gif", alt="0_plain.gif"></figure>
+
+            First of all, the boundary conditions and the diffusive dynamics are removed, by executing the command <code>echo 1 0 | gmx trjconv -s 4_MD/md_plain.tpr -f 4_MD/md_plain.xtc -o md-nojump.xtc -pbc nojump -center</code>. <code>echo 1</code> automatically chooses the protein as centering reference, while <code>echo 0</code> indicates that the whole system should be centered. The outcome looks like this:
+
+            <figure><img src="animations/1_MD/1_nojump.gif", alt="1_nojump.gif"></figure>
+
+            Notably, the solvent molecules diffuse out of the simulation box. To fix this, the command <code>echo 3 0 | gmx trjconv -s 4_MD/md_plain.tpr -f md-nojump.xtc -o md-center.xtc -pbc mol -center</code> is used.
+
+            <figure><img src="animations/1_MD/2_center.gif", alt="2_center.gif"></figure>
+
+            Finally, to stop the protein from rotating during the trajectories, the command <code>echo 1 0 | gmx trjconv -s 4_MD/md_plain.tpr -f md-center.xtc -o md-rottrans.xtc -fit rot+trans</code> is employed. As the protein is being fixed in the center, the box of water molecules adopt the rotation the protein had before, but this behavior will not affect much the subsequent analyses.
+
+            <figure><img src="animations/1_MD/3_rottrans.gif", alt="3_rottrans.gif"></figure>
+
+            The aligned trajectories are now ready to be used in the <a href="https://diegobarqueromorera.github.io/computational-biophysics-project/analysis-general.html">General Analysis</a>.
+          </p>
+
 
       </div>
     </body>

@@ -69,6 +69,10 @@ h3 {
   color: cadetblue;
   margin-bottom: 1rem !important;
 }
+h4 {
+  color: cadetblue;
+  margin-bottom: 0.75rem !important;
+}
 small {
   color: cadetblue;
 }
@@ -79,7 +83,7 @@ small {
   color: cadetblue;
 }
 img {
-  max-width: 400px;
+  max-width: 800px;
 }
 figure{
   margin: 2rem !important;
