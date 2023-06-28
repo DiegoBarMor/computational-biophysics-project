@@ -14,14 +14,14 @@
     <body>
       <nav class="navbar">
         <div class="line">
-          <a class="btn" href="https://diegobarqueromorera.github.io/computational-biophysics-project/index.html">Index</a>
-          <a class="btn" href="https://diegobarqueromorera.github.io/computational-biophysics-project/intro.html">Introduction</a>
-          <a class="btn" href="https://diegobarqueromorera.github.io/computational-biophysics-project/md.html">Molecular Dynamics</a>
+          <a class="btn" href="https://diegobarmor.github.io/computational-biophysics-project/index.html">Index</a>
+          <a class="btn" href="https://diegobarmor.github.io/computational-biophysics-project/intro.html">Introduction</a>
+          <a class="btn" href="https://diegobarmor.github.io/computational-biophysics-project/md.html">Molecular Dynamics</a>
         </div>
         <div class="line">
-          <a class="btn" href="https://diegobarqueromorera.github.io/computational-biophysics-project/analysis-general.html">General Analysis</a>
-          <a class="btn" href="https://diegobarqueromorera.github.io/computational-biophysics-project/analysis-detailed.html">Detailed Analysis</a>
-          <a class="btn" href="https://diegobarqueromorera.github.io/computational-biophysics-project/analysis-solvent.html">Solvent Analysis</a>
+          <a class="btn" href="https://diegobarmor.github.io/computational-biophysics-project/analysis-general.html">General Analysis</a>
+          <a class="btn" href="https://diegobarmor.github.io/computational-biophysics-project/analysis-detailed.html">Detailed Analysis</a>
+          <a class="btn" href="https://diegobarmor.github.io/computational-biophysics-project/analysis-solvent.html">Solvent Analysis</a>
         </div>
       </nav>
 
@@ -196,8 +196,8 @@
 
             <figure>
               <div class="d-flex flex-row fig_hscroll">
-                <img class="col px-2 img_rw100" src="figures/1_MD/benchmark_nvt_10_30_h_ns.png", alt="benchmark_nvt_10_30_h_ns.png">
-                <img class="col px-2 img_rw100" src="figures/1_MD/benchmark_nvt_10_30_ns_day.png", alt="benchmark_nvt_10_30_ns_day.png">
+                <img class="col px-2 img_rw100" src="figures/_md/benchmark_nvt_10_30_h_ns.png", alt="benchmark_nvt_10_30_h_ns.png">
+                <img class="col px-2 img_rw100" src="figures/_md/benchmark_nvt_10_30_ns_day.png", alt="benchmark_nvt_10_30_ns_day.png">
               </div>
               <div class="row">
                 <figcaption class="text-center"> [TODO] caption. 2 plots, scroll horizontally! </figcaption>
@@ -208,21 +208,21 @@
           <p>
             If the resulting <code>md_plain.xtc</code> trajectories are observed, it is evident that they need further processing before analysing them. The script <code>3_POST.sh</code> is provided to deal with this. This is how the trajectories behave originally:
 
-            <figure><img src="animations/1_MD/0_plain.gif", alt="0_plain.gif"></figure>
+            <figure><img src="animations/0_plain.gif", alt="0_plain.gif"></figure>
 
             First of all, the boundary conditions and the diffusive dynamics are removed, by executing the command <code>echo 1 0 | gmx trjconv -s 4_MD/md_plain.tpr -f 4_MD/md_plain.xtc -o md-nojump.xtc -pbc nojump -center</code>. <code>echo 1</code> automatically chooses the protein as centering reference, while <code>echo 0</code> indicates that the whole system should be centered. The outcome looks like this:
 
-            <figure><img src="animations/1_MD/1_nojump.gif", alt="1_nojump.gif"></figure>
+            <figure><img src="animations/1_nojump.gif", alt="1_nojump.gif"></figure>
 
             Notably, the solvent molecules diffuse out of the simulation box. To fix this, the command <code>echo 3 0 | gmx trjconv -s 4_MD/md_plain.tpr -f md-nojump.xtc -o md-center.xtc -pbc mol -center</code> is used.
 
-            <figure><img src="animations/1_MD/2_center.gif", alt="2_center.gif"></figure>
+            <figure><img src="animations/2_center.gif", alt="2_center.gif"></figure>
 
             Finally, to stop the protein from rotating during the trajectories, the command <code>echo 1 0 | gmx trjconv -s 4_MD/md_plain.tpr -f md-center.xtc -o md-rottrans.xtc -fit rot+trans</code> is employed. As the protein is being fixed in the center, the box of water molecules adopt the rotation the protein had before, but this behavior will not affect much the subsequent analyses.
 
-            <figure><img src="animations/1_MD/3_rottrans.gif", alt="3_rottrans.gif"></figure>
+            <figure><img src="animations/3_rottrans.gif", alt="3_rottrans.gif"></figure>
 
-            The aligned trajectories are now ready to be used in the <a href="https://diegobarqueromorera.github.io/computational-biophysics-project/analysis-general.html">General Analysis</a>.
+            The aligned trajectories are now ready to be used in the <a href="https://diegobarmor.github.io/computational-biophysics-project/analysis-general.html">General Analysis</a>.
           </p>
 
 
