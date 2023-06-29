@@ -10,6 +10,9 @@
       <script type="text/javascript" async
         src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
       </script>
+      <script>
+        function imageChange(img, src){ document.querySelector(".image[name='" + img + "']").src = src; }
+      </script>
     </head>
     <body>
       <nav class="navbar">
@@ -29,7 +32,7 @@
 
         <h2>Water Model</h2>
           <p>
-            One of the most intriguing part of the system under study was the water surrounding the protein. In the first part of this section we present a brief introduction on water models and in particular on the $TIP3P$ model, that was employed in our simulation. The second part is devoted to a simulation of the water distribution around the protein. We observe how water molecules arrange according to the hydrophobic or hydrophilic nature of the residues. Finally we estimate the accessible surface with the GROMACS tool SASA.
+            One of the most intriguing parts of the system under study was the water surrounding the protein. In the first part of this section we present a brief introduction on water models and in particular on the <code>TIP3P</code> model, that was employed in our simulation. The second part is devoted to a simulation of the water distribution around the protein. We observe how water molecules arrange according to the hydrophobic or hydrophilic nature of the residues. Finally we estimate the accessible surface with the GROMACS tool SASA.
           </p>
 
           <p>
@@ -42,7 +45,7 @@
           </p>
 
           <p>
-            The most suitable model for our system was the $TIP3P$, This water model is widely used because it is not too computationally demanding. Even to simulate a simple protein in water, a large number of water molecule is required, and their positions and velocity have to be updated at every time step. It is then necessary to have a quite simple water model. More complex models are available, but it is possible to employ them only on small systems, with less than $1000$ water molecules, and for short simulation periods $(\simeq1ps)$. These are not the length and time scales of biophysical systems.
+            The most suitable model for our system was the <code>TIP3P</code>, This water model is widely used because it is not too computationally demanding. Even to simulate a simple protein in water, a large number of water molecule is required, and their positions and velocity have to be updated at every time step. It is then necessary to have a quite simple water model. More complex models are available, but it is possible to employ them only on small systems, with less than $1000$ water molecules, and for short simulation periods $(\simeq1ps)$. These are not the length and time scales of biophysical systems.
           </p>
 
           <p>
@@ -54,6 +57,25 @@
           <p>
             TODO
           </p>
+
+          <figure>
+            <img src="animations/wad_rmsd.gif", alt="animations/wad_rmsd.gif">
+            <figcaption class="text-center">WIP</figcaption>
+          </figure>
+
+          <figure>
+            <img src="animations/wad_result.gif", alt="animations/wad_result.gif">
+            <figcaption class="text-center">WIP</figcaption>
+          </figure>
+
+          <figure>
+            <div class="line">
+              <button class="btn btn-primary my-1" onclick="imageChange('wad','figures/wad/wad_0000.png')">5472-5510</button>
+              <button class="btn btn-primary my-1" onclick="imageChange('wad','figures/wad/wad_5825.png')">5510-5692</button>
+            </div>
+            <img class="image" src="figures/wad/wad_0000.png" name="wad", alt="figures/wad/wad_0000.png">
+            <figcaption class="text-center">WIP</figcaption>
+          </figure>
 
 
         <h2>Solvent Accessible Surface Area (SASA)</h2>

@@ -131,7 +131,7 @@
               <button class="btn btn-primary my-1" onclick="imageChange('cmap_diff','figures/cmap/mt2_f5510_f5692.png')">5510-5692</button>
               <button class="btn btn-primary my-1" onclick="imageChange('cmap_diff','figures/cmap/mt2_f5472_f5692.png')">5472-5692</button>
             </div>
-            <img class="image fig_rw50" src="figures/cmap/mt2_f5472_f5510.png" name="cmap_diff", alt="cmap/mt1.png">
+            <img class="image fig_rw50" src="figures/cmap/mt2_f5472_f5510.png" name="cmap_diff", alt="cmap/mt2_f5472_f5510.png">
             <figcaption class="text-center">CMAP Differences matrices. The frame 5510 is of interest.</figcaption>
           </figure>
 
@@ -157,11 +157,48 @@
             <figcaption class="text-center">Behaviour of the trajectory between frames 5000 and 6000. The protein "opens up" momentarily near frame 5500. The subunits are represented in different colors. Residues between 200-300 and 500-600 are displayed in a semi-transparent overlay.</figcaption>
           </figure>
 
-        <h2>Active Site</h2>
-          <p>
-            TODO
-          </p>
 
+        <h2>Active Site</h2>
+          <h3>Covering of the Active Site</h3>
+            <p>
+              In the previous animation, we can observe that one end of the green subunit is moving around freely, but after the "opening up" event it starts to interact with some residues in the purple subunit. We further explored this interaction, and noticed that the interacting residues of the latter subunit were actually very close to its active site.
+            </p>
+
+            <figure>
+              <img src="animations/AS_observation_1.gif", alt="animations/AS_observation_1.gif">
+              <figcaption class="text-center">Behaviour of the trajectory between frames 5000 and 6000, different angle. Orange) Reactive part of the active site. Purple) Surroundings of the active site. Red) Residues 45-50. Yellow) Residues 289-312. Green) Residues 350-356. Blue) Residues 593-612.</figcaption>
+            </figure>
+
+            By displaying the estimated surface area of the protein, we can actually observe that this interaction seems to cover up the active site. This is a significant observation: if these conformations where te active site is obstructed are stable, they might appear frequently in the long run and imply a hindering in the activity of the active site. Unfortunately, this event happens near the end of the trajectory, so we can not observe how stable it is.
+
+            <figure>
+              <img src="animations/AS_observation_2.gif", alt="animations/AS_observation_2.gif">
+              <figcaption class="text-center">Estimated surface of the protein. Reactive atoms from the active site are represented by spheres. They get obstructed at the end of the animation. White) Hydrophobic residues. Green) Polar residues. Red) Negative residues. Blue) Positive residues.</figcaption>
+            </figure>
+
+            <figure>
+              <img src="animations/AS_observation_2a.gif", alt="animations/AS_observation_2a.gif">
+              <figcaption class="text-center">Estimated surface of the protein. The active site is obstructed immediatly after the "opening up" event. White) Hydrophobic residues. Green) Polar residues. Red) Negative residues. Blue) Positive residues.</figcaption>
+            </figure>
+
+            <figure>
+              <img src="animations/AS_observation_3.gif", alt="animations/AS_observation_3.gif">
+              <figcaption class="text-center">Detailed representation of some residues involved in the "active site covering" event. White) Hydrophobic residues. Green) Polar residues. Red) Negative residues. Blue) Positive residues.</figcaption>
+            </figure>
+
+
+          <h3>Effect on the mutation on Active Site interactions</h3>
+            We were also interested in seeing if the presence of the mutation affected in some way the local interactions in the active site. For doing this, we calculated the contact values of specific atoms and averaged them through all the frames, as a measure of how much they interacted during the simulation. We did this for all repetitions, however we did not observe any evident difference on the behaviour of the trajectories, apart from some outlier points (interactions EG, GH, IJ from <code>wt2_rep1_as0</code>).
+
+            <figure>
+                <img src="figures/cmap/residues.png", alt="figures/cmap/residues.png">
+                <figcaption class="text-center">Main interactions between atoms of the active site. Ten atoms are labelled with letters A to J. Adapted from <a href="https://www.nature.com/articles/s41467-020-16954-7" target="_blank">Kneller <i>et al</i></a>.</figcaption>
+            </figure>
+
+            <figure>
+              <img src="figures/cmap/AS.png", alt="figures/cmap/AS.png">
+              <figcaption class="text-center">Average contact between labelled atoms in the active site. For systems with two subunits, a data point is obtained for each subunit, identified here with the suffix <code>as0</code> or <code>as1</code> respectively. Left) <code>rep0</code> for all systems. Right) <code>rep1</code> for all systems.</figcaption>
+            </figure>
 
         <h2>Pyinteraph</h2>
           <p>

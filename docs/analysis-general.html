@@ -310,20 +310,34 @@
 
         <h2>Block Analysis (BSE)</h2>
           <p>
-            After all the previous methodologies, we wonder if the system has reached equilibrium. A way to have an idea on how equilibrated it might be is to use Block Analysis.
+            During this first part of the analysis we tried to understand wheter the system has reached equilibrium during the simulation but the variables we observed only gave us some indications. Looking at the RMSD, one of the most important indicators of equilibrium, we noticed that its values had an approximately constant trend toward the end even if many fluctuations were present. Better understanding how the RMSD behaves could be useful to estimate how many independent values there are, which means to the correlation time $\tau_f$ by means of the Block Analysis on the RMSD.
           </p>
 
-          <figure>
-            <div class="line">
-              <button class="btn btn-primary my-1" onclick="imageChange('bse','figures/bse/mt1.png')">mt1</button>
-              <button class="btn btn-primary my-1" onclick="imageChange('bse','figures/bse/wt1.png')">wt1</button>
-              <button class="btn btn-primary my-1" onclick="imageChange('bse','figures/bse/mt2.png')">mt2</button>
-              <button class="btn btn-primary my-1" onclick="imageChange('bse','figures/bse/wt2.png')">wt2</button>
-            </div>
-            <img class="image" src="figures/bse/mt1.png" name="bse", alt="bse/mt1.png">
-            <figcaption class="text-center">BSE arrays. Each point represents the Standard Deviation for a given chunk size used in the BSE algorithm. Results from both the naive and alternative versions of the algorithm are provided.</figcaption>
-          </figure>
+          <h3>Block Averaging Analysis method</h3>
+            <p>
+              The Block Averaging Analysis is anelegant method to estimate the autocorrelation time $\tau_f$. A trajectory with $N = M\cdot n$ snapshots is divided into $M$ segments of length $n$ with $n =1, 2, \dots$. For each block we can compute the average
 
+              $$\langle f\rangle_i, \qquad i = =1, \dots, M$$
+
+              and the standard deviation $\sigma_n$ for each value of $n$. The running estimate of the overall standard error is defined as
+
+              $$BSE(f, n) = \frac{\sigma_n}{\sqrt{M}}.$$
+
+              For small values of $n$ and high values of $M$, the Block Standard Error (BSE) under-estimates the statistical error, because we are assuming that all data points are linearly independent when in fact they are not. The $BSE$ reaches a plateau (does not depend on $n$ anymore) once the blocks are independent of one another, which means that we have included in a block a number of snapshot which correspond to a time equal or grater than the autocorrelation time. At this point it does not matter anymore how the system is subdivided into blocks.
+
+              <figure>
+                <div class="line">
+                  <button class="btn btn-primary my-1" onclick="imageChange('bse','figures/bse/mt1.png')">mt1</button>
+                  <button class="btn btn-primary my-1" onclick="imageChange('bse','figures/bse/wt1.png')">wt1</button>
+                  <button class="btn btn-primary my-1" onclick="imageChange('bse','figures/bse/mt2.png')">mt2</button>
+                  <button class="btn btn-primary my-1" onclick="imageChange('bse','figures/bse/wt2.png')">wt2</button>
+                </div>
+                <img class="image" src="figures/bse/mt1.png" name="bse", alt="bse/mt1.png">
+                <figcaption class="text-center">BSE arrays. Each point represents the Standard Deviation for a given chunk size used in the BSE algorithm. Results from both the naive and alternative versions of the algorithm are provided.</figcaption>
+              </figure>
+
+              These plots portray the $BSE$ for the four systems calculated with two different methods. We noticed that for the systems with one subunit the $BSE$ assume different trends in the two repetitions. The flat line in these graphs does not give any important information. The vertical lines correspond to the points in which we switch from a block to another.
+            </p>
       </div>
     </body>
   </html>
