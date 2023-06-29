@@ -44,7 +44,7 @@
           </p>
 
           <p>
-            Furthermore, as the RMSD matrix is symmetric, the function <code>calculations.calc_rmsd</code> calculates only half of the matrix, and then assigns the other half in a specular manner. This structure is also stored in <code>data_analysis/rmsd/</code>, to avoid calculating the RMSD each time a different visualization is performed. This idea of pre-calculation is also applied for other subsequent analysis methodologies.
+            Furthermore, as the RMSD matrix is symmetric, the function <code>calculations.calc_rmsd</code> calculates only half of the matrix, and then assigns the other half in a specular manner. This structure is also stored in <code>data_analysis/rmsd/</code>, to avoid calculating the RMSD each time a different visualization is performed. This idea of pre-calculation is also applied for other subsequent analysis methodologies, always using the same numpy-friendly NPY binary format.
           </p>
 
 
@@ -349,6 +349,8 @@
                 <li><b>WT2</b>: The frame for which BSE seems to reach the plateau is $F_{corr0} =1000$ for <code>rep0</code> and $F_{corr1} = 750$ for <code>rep1</code>. The number of independent RMSD values is $6$ values for <code>rep0</code> and $8$ values for <code>rep1</code>.</li>
               </ul>
             </p>
+
+            
       </div>
     </body>
   </html>

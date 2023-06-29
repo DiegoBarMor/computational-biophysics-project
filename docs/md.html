@@ -10,6 +10,9 @@
       <script type="text/javascript" async
         src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
       </script>
+      <script>
+        function imageChange(img, src){ document.querySelector(".image[name='" + img + "']").src = src; }
+      </script>
     </head>
     <body>
       <nav class="navbar">
@@ -191,36 +194,44 @@
             </p>
 
             <p>
-              In the two graphs below it is shown, as an example, the benchmark performed for the NVT equilibration. It can be easily observed that the nanoseconds in the simulation processed in a day, in $ns/day$, and the efficiency, in $h/ns$ then the hours to perform a nanosecond of simulation,depend on the wall time. It can be also observed that the outcomes obtained for different repetitions are different.
+              In the two plots below it is shown, as an example, the benchmark performed for the NVT equilibration. It can be easily observed that the nanoseconds in the simulation processed in a day, in $ns/day$, and the efficiency, in $h/ns$ then the hours to perform a nanosecond of simulation,depend on the wall time. It can be also observed that the outcomes obtained for different repetitions are different.
             </p>
 
             <figure>
-              <div class="d-flex flex-row fig_hscroll">
-                <img class="col px-2 img_rw100" src="figures/_md/benchmark_nvt_10_30_h_ns.png", alt="benchmark_nvt_10_30_h_ns.png">
-                <img class="col px-2 img_rw100" src="figures/_md/benchmark_nvt_10_30_ns_day.png", alt="benchmark_nvt_10_30_ns_day.png">
+              <div class="line">
+                <button class="btn btn-primary my-1" onclick="imageChange('benchmark','figures/_md/benchmark_h_ns.png')">h/ns</button>
+                <button class="btn btn-primary my-1" onclick="imageChange('benchmark','figures/_md/benchmark_ns_day.png')">ns/day</button>
               </div>
-              <div class="row">
-                <figcaption class="text-center"> [TODO] caption. 2 plots, scroll horizontally! </figcaption>
-              </div>
+              <img class="image" src="figures/_md/benchmark_h_ns.png" name="benchmark", alt="figures/_md/benchmark_h_ns.png">
+              <figcaption class="text-center">Post processing steps of the trajectory.</figcaption>
             </figure>
 
         <h2>Post processing</h2>
           <p>
-            If the resulting <code>md_plain.xtc</code> trajectories are observed, it is evident that they need further processing before analysing them. The script <code>3_POST.sh</code> is provided to deal with this. This is how the trajectories behave originally:
+            If the resulting <code>md_plain.xtc</code> trajectories are observed, it is evident that they need further processing before analysing them. The script <code>3_POST.sh</code> is provided to deal with this.
 
-            <figure><img src="animations/0_plain.gif", alt="0_plain.gif"></figure>
+            <ul>
+              <li>
+                <b>nojump</b>: First of all, the boundary conditions and the diffusive dynamics are removed, by executing the command <code>echo 1 0 | gmx trjconv -s 4_MD/md_plain.tpr -f 4_MD/md_plain.xtc -o md-nojump.xtc -pbc nojump -center</code>. <code>echo 1</code> automatically chooses the protein as centering reference, while <code>echo 0</code> indicates that the whole system should be centered.
+              </li>
+              <li>
+                <b>center</b>: Notably, the solvent molecules diffuse out of the simulation box. To fix this, the command <code>echo 3 0 | gmx trjconv -s 4_MD/md_plain.tpr -f md-nojump.xtc -o md-center.xtc -pbc mol -center</code> is used.
+              </li>
+              <li>
+                <b>rottrans</b>: Finally, to stop the protein from rotating during the trajectories, the command <code>echo 1 0 | gmx trjconv -s 4_MD/md_plain.tpr -f md-center.xtc -o md-rottrans.xtc -fit rot+trans</code> is employed. As the protein is being fixed in the center, the box of water molecules adopt the rotation the protein had before, but this behavior will not affect much the subsequent analyses.
+              </li>
+            </ul>
 
-            First of all, the boundary conditions and the diffusive dynamics are removed, by executing the command <code>echo 1 0 | gmx trjconv -s 4_MD/md_plain.tpr -f 4_MD/md_plain.xtc -o md-nojump.xtc -pbc nojump -center</code>. <code>echo 1</code> automatically chooses the protein as centering reference, while <code>echo 0</code> indicates that the whole system should be centered. The outcome looks like this:
-
-            <figure><img src="animations/1_nojump.gif", alt="1_nojump.gif"></figure>
-
-            Notably, the solvent molecules diffuse out of the simulation box. To fix this, the command <code>echo 3 0 | gmx trjconv -s 4_MD/md_plain.tpr -f md-nojump.xtc -o md-center.xtc -pbc mol -center</code> is used.
-
-            <figure><img src="animations/2_center.gif", alt="2_center.gif"></figure>
-
-            Finally, to stop the protein from rotating during the trajectories, the command <code>echo 1 0 | gmx trjconv -s 4_MD/md_plain.tpr -f md-center.xtc -o md-rottrans.xtc -fit rot+trans</code> is employed. As the protein is being fixed in the center, the box of water molecules adopt the rotation the protein had before, but this behavior will not affect much the subsequent analyses.
-
-            <figure><img src="animations/3_rottrans.gif", alt="3_rottrans.gif"></figure>
+            <figure>
+              <div class="line">
+                <button class="btn btn-primary my-1" onclick="imageChange('md','animations/0_plain.gif')">plain</button>
+                <button class="btn btn-primary my-1" onclick="imageChange('md','animations/1_nojump.gif')">nojump</button>
+                <button class="btn btn-primary my-1" onclick="imageChange('md','animations/2_center.gif')">center</button>
+                <button class="btn btn-primary my-1" onclick="imageChange('md','animations/3_rottrans.gif')">rottrans</button>
+              </div>
+              <img class="image" src="animations/0_plain.gif" name="md", alt="animations/0_plain.gif">
+              <figcaption class="text-center">Post processing steps of the trajectory.</figcaption>
+            </figure>
 
             The aligned trajectories are now ready to be used in the <a href="https://diegobarmor.github.io/computational-biophysics-project/analysis-general.html">General Analysis</a>.
           </p>

@@ -57,7 +57,7 @@
             After the observations regarding the "active site obstruction" event in the previous sections, we are interested in knowing if the accesibility of the active site by its ligand is indeed affected or not. An intuitive approach is to observe how accesible is the active site to water molecules. Water molecules visits this and other cavities during the trajectory, unless they get obstructed in some way. Therefore, we can keep track of the positions of water molecules through the trajectory, and in this way measure a sort of local density which can hint on the accesibility of water to different spaces of the protein.
           </p>
           <p>
-            We introduce a methodology based in this idea, called <b>Water Average Local Densities</b>. It is divided in three main parts: selection of frames of interest, calculation of local densities, and visualization of results. The script <code>src_analysis/wad.py</code> is to be used for executing the different steps of the pipeline. We follow this workflow for <code>mt2_rep0</code>.
+            We introduce a methodology based in this idea, called <b>Water Average Local Densities</b>. It is divided in three main parts: selection of frames of interest, calculation of local densities, and visualization of results. The script <code>src_analysis/wald.py</code> is to be used for executing the different steps of the pipeline. We follow this workflow for <code>mt2_rep0</code>, so for simplicity all paths will specify this particular run.
           </p>
 
           <h3>Step 0: Frames Selection</h3>
@@ -66,7 +66,7 @@
             </p>
 
             <p>
-              To facilitate this procedure, we provide an adapted version of interactive RMSD plot, where both reference frame and treshold values can be modulated, and then saved in <code>data_analysis/wald/mt2_rep0-info.json</code>. This file contains different values and parameters required by the methodology and allows to "communicate" easily between different steps without having to restart the workflow. This step can be executed by using the command <code>wad.py -0</code>.
+              To facilitate this procedure, we provide an adapted version of interactive RMSD plot, where both reference frame and treshold values can be modulated, and then saved in <code>data_analysis/wald/mt2_rep0-info.json</code>. This file contains different values and parameters required by the methodology and allows to "communicate" easily between different steps without having to restart the workflow. This step can be executed by using the command <code>wald.py -0</code>.
             </p>
 
             <figure>
@@ -76,22 +76,47 @@
 
           <h3>Step 1: Local Densities Calculation</h3>
             <p>
-              The WALD method is a grid based approach, which means we divide the simulation box in smaller and evenly spaced cubes. A three-dimensional grid is then populated with the experimental density values of these cubes (hence the name <i>local densities</i>). The size of the grid is a relevant parameter, too few or too many points would lead to pointless results. In our implementation, this is controlled by the parameter <code>WAD_DIVISIONS</code> at <code>src_analysis/wad_pipeline/_params.py</code>. We found that <code>WAD_DIVISIONS = 20</code> is a good empirical value for the parameter, which means that WALD grids will have a shape of $20 \times 20 \times 20$ and a size of $8000$.
+              The WALD method is a grid based approach, which means we divide the simulation box in smaller and evenly spaced cubes. A three-dimensional grid is then populated with the experimental density values of these cubes (hence the name <i>local densities</i>). The size of the grid is a relevant parameter, too few or too many points would lead to pointless results. In our implementation, this is controlled by the parameter <code>WAD_DIVISIONS</code> at <code>src_analysis/wald_pipeline/_params.py</code>. We found that <code>WAD_DIVISIONS = 20</code> is a good empirical value for the parameter, which means that WALD grids will have a shape of $20 \times 20 \times 20$ and a size of $8000$.
             </p>
             <p>
-              Populating the WALD grid is straightforward. For each grid point, we count how many water molecules go into its respective grid for all the frames of interest, then divide it by the number of frames of interest to obtain the average. This step can be executed by using the command <code>wad.py -2</code>.
+              Populating the WALD grid is straightforward. For each grid point, we count how many water molecules go into its respective grid for all the frames of interest, then divide it by the number of frames of interest to obtain the average. This step can be executed by using the command <code>wald.py -1</code>.
             </p>
 
           <h3>Visualization</h3>
             <p>
-              Visualization of the results is trickier, as we would like to represent the three-dimensional grid together with the protein in a non obstructive way. We had to choose between implementing a 3D mesh semi-transparent display method on a molecular visualization tool (such as VMD) or to implement a protein display method on a standard plotting library (such as Matplotlib). We chose the latter to keep the overall implementation ont the same Python workframe. However, some usage of VMD is still required, as will be presented now.
+              Visualization of the results is trickier, as we would like to represent the three-dimensional grid together with the protein in a non obstructive way. We had to choose between implementing a 3D mesh semi-transparent display method on a molecular visualization tool (such as VMD) or to implement a protein display method on a standard plotting library (such as Matplotlib or Plotly). We chose the latter (namely using Plotly) to keep the overall implementation on the same Python workframe. However, some usage of VMD is still required, as will be presented now.
             </p>
 
             <h4>Step 2: Preparation of meshes with VMD</h4>
+              <p>
+                We need to somehow export a visual representation of the protein as a 3D "image" that can be parsed by the WALD pipeline. Luckily, VMD provides a rendering option that includes the <a href="http://paulbourke.net/dataformats/mtl/">OBJ/MTL</a> standard, so we will work with that. Without getting much into the details, the most appropriate representation of the system is a <b>Quick Surface</b> of just the protein, as it is informative and requires relatively few vertices and faces to be rendered (hence plotting it is more efficient).
+              </p>
+
+              <p>
+                This step can be executed by using the command <code>wald.py -2</code>. A TCL script will be automatically generated as <code>data_analysis/wald/mt2_rep0.vmd</code>, which has to be opened with VMD for the next operations. An explanation on what to do now is provided by the manual of WALD, accesible by <code>wald.py -h</code>.
+              </p>
 
             <h4>Step 3: Conversion of meshes</h4>
+              <p>
+                Unfortunately, OBJ/MTL files are not directly supported by Plotly, so we have to parse them into a a custom format that is more compatible with the plotting library. We will not explain much this process because it is outside of the scope of this report. In summary, OBJ/MTL are text-based formats, which we parse using <b>Regular Expressions</b> and finally export the data into the usual NPY binary format.
+              </p>
+
+              <p>
+                Note that due to the complex nature of the parsing and the many ways VMD has to optimize their rendered OBJ/MTL files, this is a critical step that can go wrong if the preparation with VMD is not done correctly. We plan to improve this pipeline in the future for a more robust solution. This step can be executed by using the command <code>wald.py -3</code>.
+              </p>
 
             <h4>Step 4: Display of results</h4>
+              <p>
+                We finally have the local densities matrix (<code>wald/mt2_rep0-wald.npy</code>) and the protein mesh data (all the other <code>wald/*.npy</code> files), we just have to display them with Plotly. An intuitive approach when plotting 3D grid data on top of a solid object is to use semi-transparent colors for the data points, where higher values are more opaque and have a different hue, to mimic the "density" concept represented by the points.
+              </p>
+
+              <p>
+                However, it can be quickly noted that here this would generate a thick "cloud" of points around the protein, because it is surrounded by multiple layers of points with very high values of local densities (due to never being occupied by the protein). To overcome this problem, WALD actually plots the <b>inverse</b> local densities, which is obtained by just inverting the sign of the values, and impose a treshold of minimum and maximum values (points are only displayed if they are inside this range).
+              </p>
+
+              <p>
+                  As a quick note, just the tresholds would seem enough for having useful results, however, inverting the densities gives a gradient of transparency that starts from the protein (less occupied by water) and goes outwards until reaching the treshold, which avoids the ofuscation of points closer to the protein and gives a more insightful result. This step can be executed by using the command <code>wald.py -4</code>.
+              </p>
 
               <figure>
                 <div class="line">
@@ -99,13 +124,18 @@
                   <button class="btn btn-primary my-1" onclick="imageChange('wald_display','figures/wald/wald_inverse.png')">local inverse densities</button>
                 </div>
                 <img class="image" src="figures/wald/wald_naive.png" name="wald_display", alt="figures/wald/wald_naive.png">
-                <figcaption class="text-center">WIP</figcaption>
+                <figcaption class="text-center">WALD grid displayed over the protein. Displaying the thresholded inverse of the grid is more insightful. Color schema for the protein: green) hydrophilic residues, yellow) hydrophobic residues, red) active site. Opaque magenta points represent low water occupancy, grading towards more transparent blue that represents high water occupancy
+                <figcaption class="text-center"></figcaption>
               </figure>
 
               <figure>
                 <img src="animations/wald_result.gif", alt="animations/wald_result.gif">
-                <figcaption class="text-center">WIP</figcaption>
+                <figcaption class="text-center">The protein and WALD meshgrids can be moved around interactively.</figcaption>
               </figure>
+
+              <p>
+                As mentioned at the beginning of this section, we followed the WALD pipeline for reference frames 0 and 5825 of the trajectoy, which represent the common available state and the obstructed state of the active site respectively. We observe that at frames conformationally related to 5825 the active site are indeed less occupied by water molecules, confirming our previous observations. Note however that this result is mostly qualitative (we do have the local density values, but we are just visualizing them).
+              </p>
 
               <figure>
                 <div class="line">
@@ -154,6 +184,7 @@
               <figcaption class="text-center">Left) Volume enclosed by the surface area in each frame. Right) Their respective density. Similarly to the previous cases, they are very noisy, so we can not make any assumptions on the trend.</figcaption>
             </figure>
           </p>
+
 
       </div>
     </body>
