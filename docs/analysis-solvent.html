@@ -29,12 +29,11 @@
       </nav>
 
       <div class="contents"> <h1>Solvent Analysis</h1>
+        <p>
+          In the first part of this section we present a brief introduction on water models and in particular on the <code>TIP3P</code> model, that was employed in our simulation. Then, we introduce a method for analyzing the water distribution around the protein. Finally we estimate the accessible surface area with the GROMACS tool SASA.
+        </p>
 
         <h2>Water Model</h2>
-          <p>
-            One of the most intriguing parts of the system under study was the water surrounding the protein. In the first part of this section we present a brief introduction on water models and in particular on the <code>TIP3P</code> model, that was employed in our simulation. The second part is devoted to a simulation of the water distribution around the protein. We observe how water molecules arrange according to the hydrophobic or hydrophilic nature of the residues. Finally we estimate the accessible surface with the GROMACS tool SASA.
-          </p>
-
           <p>
             Modelling water is a challenging task since its microscopic structure at the liquid state it is not known yet and many different models are available. The choice of the water model is determined by
             <ul>
@@ -49,38 +48,78 @@
           </p>
 
           <p>
-            This model, as many other frequently used, ignores the proton hopping from one molecule to another, which favours the cluster formation. It describes the water as a planar molecule, with three interaction sites, an Oxygen atom and two Hydrogens. The atoms interact due to the Coulomb interaction and are modeled as point like particles. The long range electrostatic interaction is truncated after a cutoff distance. The Oxygen atom also interacts with other molecules by means of the Lennard-Jones interaction.
+            This model, as many other frequently used, ignores the proton hopping from one molecule to another, which favours the cluster formation. It describes the water as a planar molecule, with three interaction sites, an Oxygen atom and two Hydrogens. The atoms interact due to the Coulomb interaction and are modeled as point like particles. The long range electrostatic interaction is truncated after a cutoff distance. The Oxygen atom also interacts with other molecules by means of the Lennard-Jones interaction. <a href="https://water.lsbu.ac.uk/water/water_structure_science.html">Source</a>.
           </p>
 
 
-        <h2>WAD</h2>
+        <h2>Water Average Local Densities (WALD)</h2>
           <p>
-            TODO
+            After the observations regarding the "active site obstruction" event in the previous sections, we are interested in knowing if the accesibility of the active site by its ligand is indeed affected or not. An intuitive approach is to observe how accesible is the active site to water molecules. Water molecules visits this and other cavities during the trajectory, unless they get obstructed in some way. Therefore, we can keep track of the positions of water molecules through the trajectory, and in this way measure a sort of local density which can hint on the accesibility of water to different spaces of the protein.
+          </p>
+          <p>
+            We introduce a methodology based in this idea, called <b>Water Average Local Densities</b>. It is divided in three main parts: selection of frames of interest, calculation of local densities, and visualization of results. The script <code>src_analysis/wad.py</code> is to be used for executing the different steps of the pipeline. We follow this workflow for <code>mt2_rep0</code>.
           </p>
 
-          <figure>
-            <img src="animations/wad_rmsd.gif", alt="animations/wad_rmsd.gif">
-            <figcaption class="text-center">WIP</figcaption>
-          </figure>
+          <h3>Step 0: Frames Selection</h3>
+            <p>
+              The WALD method averages over a set of frames to obtain the average local densities. The final result is displayed as an overlay of a particular frame of interest that has to be chosen beforehand. Therefore, it is sensitive to select a set of frames that are structurally similar to the reference, in order to have good results. We choose RMSD as a measure of similarity, and choose all the frames of the simulation under a given treshold RMSD value against the reference frame.
+            </p>
 
-          <figure>
-            <img src="animations/wad_result.gif", alt="animations/wad_result.gif">
-            <figcaption class="text-center">WIP</figcaption>
-          </figure>
+            <p>
+              To facilitate this procedure, we provide an adapted version of interactive RMSD plot, where both reference frame and treshold values can be modulated, and then saved in <code>data_analysis/wald/mt2_rep0-info.json</code>. This file contains different values and parameters required by the methodology and allows to "communicate" easily between different steps without having to restart the workflow. This step can be executed by using the command <code>wad.py -0</code>.
+            </p>
 
-          <figure>
-            <div class="line">
-              <button class="btn btn-primary my-1" onclick="imageChange('wad','figures/wad/wad_0000.png')">5472-5510</button>
-              <button class="btn btn-primary my-1" onclick="imageChange('wad','figures/wad/wad_5825.png')">5510-5692</button>
-            </div>
-            <img class="image" src="figures/wad/wad_0000.png" name="wad", alt="figures/wad/wad_0000.png">
-            <figcaption class="text-center">WIP</figcaption>
-          </figure>
+            <figure>
+              <img src="animations/wald_rmsd.gif", alt="animations/wald_rmsd.gif">
+              <figcaption class="text-center">Interactive RMSD. The reference frame and maximum RMSD treshold value can be modulated to manually cluster points that will be the set of frames for the WALD methodology.</figcaption>
+            </figure>
+
+          <h3>Step 1: Local Densities Calculation</h3>
+            <p>
+              The WALD method is a grid based approach, which means we divide the simulation box in smaller and evenly spaced cubes. A three-dimensional grid is then populated with the experimental density values of these cubes (hence the name <i>local densities</i>). The size of the grid is a relevant parameter, too few or too many points would lead to pointless results. In our implementation, this is controlled by the parameter <code>WAD_DIVISIONS</code> at <code>src_analysis/wad_pipeline/_params.py</code>. We found that <code>WAD_DIVISIONS = 20</code> is a good empirical value for the parameter, which means that WALD grids will have a shape of $20 \times 20 \times 20$ and a size of $8000$.
+            </p>
+            <p>
+              Populating the WALD grid is straightforward. For each grid point, we count how many water molecules go into its respective grid for all the frames of interest, then divide it by the number of frames of interest to obtain the average. This step can be executed by using the command <code>wad.py -2</code>.
+            </p>
+
+          <h3>Visualization</h3>
+            <p>
+              Visualization of the results is trickier, as we would like to represent the three-dimensional grid together with the protein in a non obstructive way. We had to choose between implementing a 3D mesh semi-transparent display method on a molecular visualization tool (such as VMD) or to implement a protein display method on a standard plotting library (such as Matplotlib). We chose the latter to keep the overall implementation ont the same Python workframe. However, some usage of VMD is still required, as will be presented now.
+            </p>
+
+            <h4>Step 2: Preparation of meshes with VMD</h4>
+
+            <h4>Step 3: Conversion of meshes</h4>
+
+            <h4>Step 4: Display of results</h4>
+
+              <figure>
+                <div class="line">
+                  <button class="btn btn-primary my-1" onclick="imageChange('wald_display','figures/wald/wald_naive.png')">local densities</button>
+                  <button class="btn btn-primary my-1" onclick="imageChange('wald_display','figures/wald/wald_inverse.png')">local inverse densities</button>
+                </div>
+                <img class="image" src="figures/wald/wald_naive.png" name="wald_display", alt="figures/wald/wald_naive.png">
+                <figcaption class="text-center">WIP</figcaption>
+              </figure>
+
+              <figure>
+                <img src="animations/wald_result.gif", alt="animations/wald_result.gif">
+                <figcaption class="text-center">WIP</figcaption>
+              </figure>
+
+              <figure>
+                <div class="line">
+                  <button class="btn btn-primary my-1" onclick="imageChange('wald_results','figures/wald/wald_0000.png')">frame 0</button>
+                  <button class="btn btn-primary my-1" onclick="imageChange('wald_results','figures/wald/wald_5825.png')">frame 5825</button>
+                </div>
+                <img class="image" src="figures/wald/wald_0000.png" name="wald_results", alt="figures/wald/wald_0000.png">
+                <figcaption class="text-center">WIP</figcaption>
+              </figure>
 
 
         <h2>Solvent Accessible Surface Area (SASA)</h2>
           <p>
-            A more quantitative way to investigate the distribution of water molecules around the protein consists in using SASA, a GROMACS tool which computes the solvent accessible surface area. The input file consists in all the non solvent atoms, that is the entire protein. Starting from this input the entire surface of the protein is calculated. From the WAD analysis we noticed that some regions of the protein are hydrophilic and some other are hydrophobic.
+            A quantitative way to investigate the distribution of water molecules around the whole protein consists in using SASA, a GROMACS tool which computes the solvent accessible surface area. The input file consists in all the non solvent atoms, that is the entire protein. Starting from this input the entire surface of the protein is calculated. From the WAD analysis we noticed that some regions of the protein are hydrophilic and some other are hydrophobic.
 
             <figure>
               <img src="figures/sasa/sfe.png", alt="figures/sasa/sfe.png">

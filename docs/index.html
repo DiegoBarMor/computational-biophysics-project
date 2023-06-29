@@ -10,6 +10,9 @@
       <script type="text/javascript" async
         src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
       </script>
+      <script>
+        function imageChange(img, src){ document.querySelector(".image[name='" + img + "']").src = src; }
+      </script>
     </head>
     <body>
       <nav class="navbar">
@@ -31,12 +34,24 @@
 
         <h2>Description</h2>
           <p>
-            This documentation serves as a report for the project of Computational Biophysics course 2022-2023 (University of Trento). The repository contains the source code and initial input files necessary to reproduce all the steps detailed by the report, as well as instructions of use inside the documentation.
+            The focus of this project is to analyse the dynamics of a protease of interest. The software used to simulate the trajectory is <code>GROMACS</code>, which integrates the equations of motion by means of the Verlet algorithm. Once the trajectories were obtained they were analysed, focusing on general aspects of the trajectories, as well as frames of interest, the active sites and the distribution of water around the protein. The analysis is mostly performed via Python 3 scripts. The library <code>MDAnalysis</code> facilitates dealing with GRO and XTC files, as well as performing different analysis methodologies. Refer to the <a href="https://github.com/annaPini/CBProject/">repository</a> for source code and initial input files necessary to reproduce all the steps detailed by the report.
           </p>
 
-          <p>
-            The focus of this project is to analyse the dynamics of a protease of interest. The software used to simulate the trajectory is <code>GROMACS</code>, which integrates the equations of motion by means of the Verlet algorithm. Once the trajectories were obtained they were analysed, focusing on general aspects of the trajectories, as well as frames of interest, the active sites and the distribution of water around the protein. The analysis is mostly performed via Python 3 scripts. The library <code>MDAnalysis</code> facilitates dealing with GRO and XTC files, as well as performing different analysis methodologies.
-          </p>
+          <h3>About the figures</h3>
+            <p>
+              Some figures in this report are interactive, meaning that they have buttons on top that allow to change between the plots/snapshots of different systems to better compare them.
+
+              <figure>
+                <div class="line">
+                  <button class="btn btn-primary my-1" onclick="imageChange('example','animations/0_plain.gif')">plain</button>
+                  <button class="btn btn-primary my-1" onclick="imageChange('example','animations/1_nojump.gif')">nojump</button>
+                  <button class="btn btn-primary my-1" onclick="imageChange('example','animations/2_center.gif')">center</button>
+                  <button class="btn btn-primary my-1" onclick="imageChange('example','animations/3_rottrans.gif')">rottrans</button>
+                </div>
+                <img class="image" src="animations/0_plain.gif" name="example", alt="animations/0_plain.gif">
+                <figcaption class="text-center">Example of an interactive figure. Click the buttons on top of the figure to change between results.</figcaption>
+              </figure>
+            </p>
 
         <h2>Index</h2>
           <ul>

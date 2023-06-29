@@ -31,7 +31,7 @@
 
       <div class="contents"> <h1>General Analysis</h1>
         <p>
-          The source code for the general, detailed and solvent analysis is found in the folder <code>src_analysis/</code>. It contains scripts for both calculation and visualization of the results. Numerical results are stored in a folder created while executing <code>src_md/3_POST.sh</code>, called <code>data_analysis</code>.
+          The source code for the general, detailed and solvent analysis is found in the folder <code>src_analysis/</code>. It contains scripts for both calculation and visualization of the results, which are to be accessed using the <code>src_analysis/main.py</code> script. Numerical results are stored in a folder created while executing <code>src_md/3_POST.sh</code>, called <code>data_analysis</code>.
         </p>
 
         <h2>Calculations</h2>
@@ -323,7 +323,11 @@
 
               $$BSE(f, n) = \frac{\sigma_n}{\sqrt{M}}.$$
 
-              For small values of $n$ and high values of $M$, the Block Standard Error (BSE) under-estimates the statistical error, because we are assuming that all data points are linearly independent when in fact they are not. The $BSE$ reaches a plateau (does not depend on $n$ anymore) once the blocks are independent of one another, which means that we have included in a block a number of snapshot which correspond to a time equal or grater than the autocorrelation time. At this point it does not matter anymore how the system is subdivided into blocks.
+              For small values of $n$ and high values of $M$, the Block Standard Error (BSE) under-estimates the statistical error, because we are assuming that all data points are linearly independent when in fact they are not. The $BSE$ reaches a plateau (does not depend on $n$ anymore) once the blocks are independent of one another, which means that we have included in a block a number of snapshot which correspond to a time equal or grater than the autocorrelation time. At this point it does not matter anymore how the system is subdivided into blocks. Once the correlation time, or the correspondent frame has been estimated, it is possible to calculate the number of independent values of the RMSD as
+
+              $$N_{RMSD}^{ind}\simeq\frac{F_{sim}}{F_{corr}}$$
+
+              where $F_{sim}=6000$ is the total number of frames in the simulation and $F_{corr}$ is the frame at which the BSE reaches a plateau.
 
               <figure>
                 <div class="line">
@@ -337,6 +341,13 @@
               </figure>
 
               These plots portray the $BSE$ for the four systems calculated with two different methods. We noticed that for the systems with one subunit the $BSE$ assume different trends in the two repetitions. The flat line in these graphs does not give any important information. The vertical lines correspond to the points in which we switch from a block to another.
+
+              <ul>
+                <li><b>MT1</b>: The frame for which BSE seems to reach the plateau is $F_{corr0} =1000$ for <code>rep0</code> and $F_{corr1} = 200$ for <code>rep1</code>. In this last case we observe that the BSE for <code>rep1</code> appears as a constant line and we could not precisely estimate $F_{corr1}$. The number of independent RMSD values is $6$ values for <code>rep0</code> and $30$ values for <code>rep1</code>.</li>
+                <li><b>WT1</b>: The frame for which BSE seems to reach the plateau is $F_{corr0} =200$ for <code>rep0</code> and $F_{corr1} = 1000$ for <code>rep1</code>. In this last case we observe that the BSE for <code>rep0</code> appears as a constant line and we could not precisely estimate $F_{corr0}$. The number of independent RMSD values is $30$ values for <code>rep0</code> and $6$ values for <code>rep1</code>.</li>
+                <li><b>MT2</b>: The frame for which BSE seems to reach the plateau is $F_{corr0} =750$ for <code>rep0</code> and $F_{corr1} = 1250$ for <code>rep1</code>. The number of independent RMSD values is $8$ values for <code>rep0</code> and $5$ values for <code>rep1</code>.</li>
+                <li><b>WT2</b>: The frame for which BSE seems to reach the plateau is $F_{corr0} =1000$ for <code>rep0</code> and $F_{corr1} = 750$ for <code>rep1</code>. The number of independent RMSD values is $6$ values for <code>rep0</code> and $8$ values for <code>rep1</code>.</li>
+              </ul>
             </p>
       </div>
     </body>
