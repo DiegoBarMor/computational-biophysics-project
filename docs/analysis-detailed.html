@@ -186,7 +186,6 @@
               <figcaption class="text-center">Detailed representation of some residues involved in the "active site covering" event. White) Hydrophobic residues. Green) Polar residues. Red) Negative residues. Blue) Positive residues.</figcaption>
             </figure>
 
-
           <h3>Effect on the mutation on Active Site interactions</h3>
             We were also interested in seeing if the presence of the mutation affected in some way the local interactions in the active site. For doing this, we calculated the contact values of specific atoms and averaged them through all the frames, as a measure of how much they interacted during the simulation. We did this for all repetitions, however we did not observe any evident difference on the behaviour of the trajectories, apart from some outlier points (interactions EG, GH, IJ from <code>wt2_rep1_as0</code>).
 
@@ -202,12 +201,12 @@
 
         <h2>Pyinteraph</h2>
           <p>
-            We have observed that during the trajectory,around frame 5000, the lower part of the protein enlarges and at the same time the upper part moves too. We wondered if there are some correlations between these fluctuations, in particular we wanted to explore in detail what kind of interaction occurs between the residues involved. We adressed this problem by means of Pyinteraph, a software designed to identify interaction networks.
+            We wondered if there are some correlations between the "opening up" and "active site covering" events described before. In particular we wanted to further explore what kind of interaction occurs between the residues involved. For adressing this, we briefly refered to <code>Pyinteraph</code>, a software designed to identify interaction networks. We followed the Pyinteraph workflow to obtain interaction matrices between residues during the <code>met2_rep0</code> trajectory.
           </p>
 
           <figure>
             <img src="figures/pyinteraph/sb_hc.png", alt="figures/pyinteraph/sb_hc.png">
-            <figcaption class="text-center">Interactions between pairs of residues. Left) Salt Bridges. Right) Hydrophobic Clusters.</figcaption>
+            <figcaption class="text-center">Interactions between pairs of residues in <code>mt2_rep0</code>. Left) Salt Bridges. Right) Hydrophobic Clusters.</figcaption>
           </figure>
 
           <p>
@@ -215,7 +214,11 @@
           </p>
 
           <p>
-            WIP
+            A deeper analysis could be performed using Pyinteraph for frames before and after the "opening up" event in an independent way. Comparing the interaction maps of such results could prove insightful, however we do not include it in this work. Some possible results obtained by this approach can be searched manually, by taking the interactions with higher occurance that however do not equal $100\%$, the idea being that this could be residues that were always interacting but got disrupted during the trajectoy.
+          </p>
+
+          <p>
+            In fact, one of the salt bridge interactions with more occurance ($88.4\%$) happens between residues 5 and 290. Residue 290 is in fact in the range of residues of interest described previously, and when checking the trajectory, this interaction is indeed strongly present throughout the frames until the "opening up" event, where it gets disrupted permanently.
           </p>
 
       </div>
