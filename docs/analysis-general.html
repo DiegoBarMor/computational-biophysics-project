@@ -223,7 +223,7 @@
             </figure>
 
             <p>
-              Here we compare the RMSF of the whole protein with the one computed for only a subunit. In this way we can explore how the fluctuations of atoms in a given subunit are correlated to the fluctuations in the other subunit. We also observe that when the mutation is introduced to a single subunit, it becomes more unstable (higher RMSF values). However, when grouping the subunits in a dimeric form, both <code>wt2</code> and <code>mt2</code> reach a similar stability. This reaffirms the idea that the subunits are more stable when they are in a dimeric complex, as is the case of <code>8DFN</code> and <code>7SI9</code> in their natural state.
+              Here we compare the RMSF of the whole protein with the one computed for only a subunit. In this way we can explore how the fluctuations of atoms in a given subunit are correlated to the fluctuations in the other subunit. We also observe that when the mutation is introduced to a single subunit, it becomes more unstable (higher RMSF values). However, when grouping the subunits in a dimeric form, both <code>wt2</code> and <code>mt2</code> reach a similar stability. This reaffirms the idea that these subunits are more stable when they are in a dimeric complex, as is the case of <code>8DFN</code> and <code>7SI9</code> in their natural state.
             </p>
 
 
@@ -300,18 +300,18 @@
           </figure>
 
           <p>
-            The darkest parts represent the regions in which there is more contact between the residues, while the brightest parts correspond to the regions in which there is less contact. In the contact maps for systems with two subunits, a discontinuous line in the indicates the region in which the first subunit ends and the second one begins. It can be observed that the map is symmetric. Some secondary structures can be inferred by observing the lines tangent to the main diagonal, namely antiparallel $\beta$ sheets.
+            The darkest parts represent the regions in which there is more contact between the residues, while the brightest parts correspond to the regions in which there is less contact. In the contact maps for systems with two subunits, a discontinuous line indicates the region in which the first subunit ends and the second one begins. It is also evident that the map is symmetric, as distances are symmetric by definition. Some secondary structures can be inferred by observing the lines tangent to the main diagonal, namely antiparallel $\beta$ sheets.
           </p>
 
 
         <h2>Block Analysis (BSE)</h2>
           <p>
-            During this first part of the analysis we tried to understand whether the system has reached equilibrium during the simulation but the variables we observed only gave us some indications. Looking at the RMSD, one of the most important indicators of equilibrium, we noticed that its values had an approximately constant trend toward the end even if many fluctuations were present.
+            During this first part of the analysis we sought to understand whether the system has reached equilibrium during the simulation, but the variables we observed only gave us some indications. Looking at the RMSD, one of the most important indicators of equilibrium, we noticed that its values had an approximately constant trend toward the end even if many fluctuations were present.
           </p>
 
           <h3>Block Averaging Analysis method</h3>
             <p>
-              The Block Averaging Analysis is anelegant method to estimate the autocorrelation time $\tau_f$. A trajectory with $N = M \times n$ snapshots is divided into $M$ segments of length $n$ with $n =1, 2, \dots$. For each block we can compute the average
+              The Block Averaging Analysis is an elegant method to estimate the autocorrelation time $\tau_f$. A trajectory with $N = M \times n$ snapshots is divided into $M$ segments of length $n$ with $n =1, 2, \dots$. For each block we can compute the average
 
               $$\langle f\rangle_i, \qquad i = 1, \dots, M$$
 

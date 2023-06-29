@@ -30,17 +30,17 @@
 
       <div class="contents"> <h1>Detailed Analysis</h1>
         <p>
-          In this section, we aimed to deepen the analysis of some trajectory of interest. With hierarchical clustering and PCA of the trajectories' RMSD values, we find an interesting behaviour in <code>mt2_rep0</code>. For better understanding this phenomenon, we introduce a specialized version of the contact map analysis, abbreviated DCMD, were we calculate the difference between the contact map of different. We observe an interesting result at frame ~5500, which we then check in VMD and find out it is caused by the protein "opening up" momentarily. From the evolution in VMD we also noticed that the active site gets "closed" near the end of the trajectory, probably because of the mutation. We compared with the evolution of the wild type and we noticed that in this case the active site does not behave in this way.
+          In this section, we aimed to deepen the analysis of some trajectory of interest. With hierarchical clustering and PCA of the trajectories' RMSD values, we find an interesting behaviour in <code>mt2_rep0</code>. For better understanding this phenomenon, we introduce a specialized version of the contact map analysis, abbreviated DCMD, were we calculate the difference between the contact map of different frames. We observe an interesting result around frame 5500, which we then check in VMD and find out it is caused by the protein "opening up" momentarily. From the evolution in VMD we also noticed that the active site gets "obstructed" near the end of the trajectory.
         </p>
 
         <h2>Unsupervised Clustering</h2>
           <p>
-            In the general analysis section we calculated the RMSD for the trajectories. The RMSD is only an indicator of the stability of the protein, then considering only this parameter we cannot be sure that system is at equilibrium. To have a better insight of the possible configuration changes we use the hierarchical clustering method. With this procedure we aim to identify clusters for each frame, where each cluster collects the frames particularly near to each other (in terms of RMSD). We set the clustering linkage method as <b>ward</b> and the labelling criterion as <b>distance</b>.
+            In the general analysis section we calculated the RMSD for the trajectories. The RMSD is only an indicator of the stability of the protein, so considering only this parameter we cannot be sure that system is at equilibrium. To have a better insight of the possible configuration changes we use the <b>hierarchical clustering</b> method. With this procedure we aim to identify clusters for each frame, where each cluster collects the frames particularly near to each other (in terms of RMSD). We set the clustering linkage method as <b>ward</b> and the labelling criterion as <b>distance</b>.
           </p>
 
           <h3>Hierarchical Clustering</h3>
             <p>
-              We begin the clustering analysis by introducing clusters to the RMSD calculated in the previous section. Hopefully, the points belonging to the same cluster represent configurations near to each other. To decide which frames are near it is necessary to introduce a threshold, on the difference between two RMSD values. This is given by the <code>t_value</code> of the clustering method. However, in the plot we notice that the points belonging to the same cluster are not necessary subsequent values of the RMSD.
+              We begin the clustering analysis by introducing clusters to the RMSD calculated in the previous section. Hopefully, the points belonging to the same cluster represent configurations geometrically similar to each other. To decide which frames are near it is necessary to introduce a threshold on the difference between two RMSD values. This is given by the <code>t_value</code> of the clustering method. However, in the plot we notice that the points belonging to the same cluster are not necessarily consecutive frames in the trajectory.
             </p>
 
             <figure>
@@ -65,7 +65,7 @@
 
             <figure>
               <img src="animations/clusters_2.gif", alt="animations/clusters_2.gif">
-              <figcaption class="text-center">By highlighting the cluster of the current reference frame, we notice members of the clusters can be in unexpected places. For example, some points belonging to the yellow cluster lie in the first part of the trajectory while the great majority of them is at the end of the trajectory.</figcaption>
+              <figcaption class="text-center">By highlighting the cluster of the current reference frame, we notice members of the clusters can be in unexpected places. For example, some points belonging to the yellow cluster lie in the first part of the trajectory while the great majority of them are at the end of the trajectory.</figcaption>
             </figure>
 
           <h3>Principal Component Analysis (PCA)</h3>
@@ -85,11 +85,11 @@
             </figure>
 
             <p>
-              As hierarchical clustering showed that <code>mt2</code> has an interesting clustering, we focus on how the frames of this trajectory cluster when performing PCA. Effectively, the frames conforming the cluster of interest for the hierarchical method also have an interesting behavior under PCA. We can observe that most frames cluster together in an ordered manner, representing similarity in their configuration, while frames after 5000 are highly spread.
-
+              In the plots to the left, clusters for the trajectory under study can be found by projecting their frames into the most important components. In some cases a distinct separation of some data points is evident, namely <code>mt1</code> and <code>mt2</code>. The plots on the right represent the covariance between the components. Similar to other dynamic plots presented before, a single row of the covariance matrix can be observed at a time by using the slider.
             </p>
+
             <p>
-                This observation complements hierarchical clustering, by hinting that, even though the final frames can be placed under a same cluster because they differ significantly from the rest, the final frames differ also amongst themselves. This can also be confirmed when observing the animation for the higlighted clustering plot. We conclude that there might be some sort of transition happening during these frames.
+              As hierarchical clustering showed that <code>mt2</code> has an interesting clustering, we focus on how the frames of this trajectory cluster when performing PCA. Effectively, the frames conforming the cluster of interest for the hierarchical method also have an interesting behavior under PCA. We can observe that most frames cluster together in an ordered manner, representing similarity in their configuration, while frames after 5000 are highly spread.
             </p>
 
             <figure>
@@ -98,7 +98,7 @@
             </figure>
 
             <p>
-              In the plots on the left, clusters for the trajectory under study can be found by projecting its frames into the most important components. In some cases a distinct separation of some data points is evident, namely <code>mt1</code> and <code>mt2</code>. The plots on the right represent the covariance between the components. Similar to other dynamic plots presented before, a single row of the covariance matrix can be observed at a time by using the slider.
+              This observation complements hierarchical clustering, by hinting that, even though the final frames can be placed under a same cluster because they differ significantly from the rest, the final frames differ also amongst themselves. This can also be confirmed when observing the animation above for the higlighted clustering plot. We conclude that there might be some sort of transition happening during these frames.
             </p>
 
 
@@ -149,7 +149,7 @@
           </p>
 
           <p>
-            Furthermore, the residues in the ranges 200-300 and 500-600 are involved, which after considering that each subunit has a size of 306, actually means residues between 200-300 in the first subunit and 200-300 in the second subunit. This could imply that the transitory conformational change involves perhaps some way of symmetry. This effect is specially evident near the ends of the subunits. We confirm this insights by observing directly the trajectory at the time and place of interest.
+            Furthermore, the residues in the ranges 200-300 and 500-600 are involved, which after considering that each subunit has a size of 306, actually means residues between 200-300 in the first subunit and 200-300 in the second subunit. This could imply that the transitory conformational change involves perhaps some way of symmetry. This effect is specially evident near the ends of the subunits. We confirm these insights by observing directly the trajectory at the time and place of interest.
           </p>
 
           <figure>
@@ -169,7 +169,7 @@
               <figcaption class="text-center">Behaviour of the trajectory between frames 5000 and 6000, different angle. Orange) Reactive part of the active site. Purple) Surroundings of the active site. Red) Residues 45-50. Yellow) Residues 289-312. Green) Residues 350-356. Blue) Residues 593-612.</figcaption>
             </figure>
 
-            By displaying the estimated surface area of the protein, we can actually observe that this interaction seems to cover up the active site. This is a significant observation: if these conformations where te active site is obstructed are stable, they might appear frequently in the long run and imply a hindering in the activity of the active site. Unfortunately, this event happens near the end of the trajectory, so we can not observe how stable it is.
+            By displaying the estimated surface area of the protein, we can actually observe that this interaction seems to cover up the active site. This is a significant observation: if these conformations where the active site is obstructed are stable, they might appear frequently in the long run and imply a hindering in the activity of the active site. Unfortunately, this event happens near the end of the trajectory, so we can not observe how stable it is.
 
             <figure>
               <img src="animations/AS_observation_2.gif", alt="animations/AS_observation_2.gif">
@@ -210,15 +210,19 @@
           </figure>
 
           <p>
-            This plot portrays the salt bridges and the hydrophobic interactions between couples of residues. Two hydrophobic residues interact if the center of mass of the side chain of the two residues is found within 5 Å. Two charged groups interact if their distance is less than 2.5 Å (salt bridges). In this case the distance between residues is computed as the shortest distance between two of their atoms. Evidently, the interaction matrix for hydrophobic clusters is more populated, as the minimum distance treshold is double than that of salt bridges.
+            This plot portrays the salt bridges and the hydrophobic interactions between couples of residues. Two hydrophobic residues interact if the center of mass of the side chain of the two residues is found within 5 Å. Two charged groups interact (salt bridges) if their distance is less than 2.5 Å. In this case the distance between residues is computed as the shortest distance between two of their atoms. Evidently, the interaction matrix for hydrophobic clusters is more populated, as the minimum distance treshold is double than that of salt bridges.
           </p>
 
           <p>
-            A deeper analysis could be performed using Pyinteraph for frames before and after the "opening up" event in an independent way. Comparing the interaction maps of such results could prove insightful, however we do not include it in this work. Some possible results obtained by this approach can be searched manually, by taking the interactions with higher occurance that however do not equal $100\%$, the idea being that this could be residues that were always interacting but got disrupted during the trajectoy.
+            A deeper analysis could be performed using Pyinteraph for frames before and after the "opening up" event in an independent way. Comparing the interaction maps of such results could prove insightful, however we do not include it in this work.
           </p>
 
           <p>
-            In fact, one of the salt bridge interactions with more occurance ($88.4\%$) happens between residues 5 and 290. Residue 290 is in fact in the range of residues of interest described previously, and when checking the trajectory, this interaction is indeed strongly present throughout the frames until the "opening up" event, where it gets disrupted permanently.
+             To exemplify this idea, some possible results obtained by this approach can be searched manually. By taking the interactions with higher occurance that however do not equal $100\%$, some of these could be residues that were always interacting but got disrupted during the trajectoy.
+           </p>
+
+          <p>
+            In fact, one of the salt bridge interactions with higher occurance ($88.4\%$) happens between residues 5 and 290. Residue 290 is in fact in the range of residues of interest described previously, and when checking the trajectory, this interaction is indeed strongly present throughout the frames until the "opening up" event, where it gets disrupted permanently.
           </p>
 
 
