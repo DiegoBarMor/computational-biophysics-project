@@ -1,0 +1,40 @@
+#!/bin/bash
+#PBS -l select=1:ncpus=32:mpiprocs=32:mem=10GB
+#PBS -l walltime=05:00:00
+#PBS -q short_cpuQ
+#PBS -N EM
+#PBS -o logs/em_out
+#PBS -e logs/em_err
+
+module load gromacs-2021.4
+export OMP_NUM_THREADS=1
+cd $PBS_O_WORKDIR
+
+mkdir logs
+
+##### prepare 2 repetitions for each input
+cd ../data_md
+cp mt1 mt1_rep0
+cp mt2 mt2_rep0
+cp wt1 wt1_rep0
+cp wt2 wt2_rep0
+
+mv mt1 mt1_rep1
+mv mt2 mt2_rep1
+mv wt1 wt1_rep1
+mv wt2 wt2_rep1
+
+for run in mt1_rep0 mt1_rep1 mt2_rep0 mt2_rep1 wt1_rep0 wt1_rep1 wt2_rep0 wt2_rep1
+do
+    cd $run
+
+    ############################################################################ ENERGY MINIMIZATION
+    mkdir 1_EM 2_NVT 3_NPT 4_MD
+
+    gmx grompp -f ../_params/minim.mdp -c 0_input/input.gro -p 0_input/topol.top -o 1_EM/em.tpr
+    mpirun -np 32 gmx_mpi mdrun -v -deffnm 1_EM/em
+
+    echo "11" | gmx energy -f 1_EM/em.edr -o 1_EM/potential.xvg
+
+    cd ..
+done

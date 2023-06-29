@@ -1,0 +1,7 @@
+*__pycache__*
+
+*.pdn
+*.xtc
+
+data_analysis/
+data_md/*_rep*

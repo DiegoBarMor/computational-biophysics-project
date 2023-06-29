@@ -1,0 +1,15 @@
+; minim.mdp - used as input into grompp to generate em.tpr
+; Parameters describing what to do, when to stop and what to save
+integrator  = steep
+emtol       = 400.0
+emstep      = 0.01
+nsteps      = 5000
+
+; Parameters describing how to find the neighbors of each atom and how to calculate the interactions
+nstlist         = 1
+cutoff-scheme   = Verlet
+ns_type         = grid
+coulombtype     = PME
+rcoulomb        = 1.0
+rvdw            = 1.0
+pbc             = xyz

@@ -1,0 +1,34 @@
+#!/bin/bash
+#PBS -l select=1:ncpus=64:mpiprocs=64:mem=10GB
+#PBS -l walltime=05:00:00
+#PBS -q short_cpuQ
+#PBS -N NVT_NPT
+#PBS -o logs/nvtnpt_out
+#PBS -e logs/nvtnpt_err
+
+module load gromacs-2021.4
+export OMP_NUM_THREADS=1
+cd $PBS_O_WORKDIR/../data_md
+
+for run in mt1_rep0 mt1_rep1 mt2_rep0 mt2_rep1 wt1_rep0 wt1_rep1 wt2_rep0 wt2_rep1
+do
+    cd $run
+
+    ############################################################################ EQUILIBRATION
+    ##### NVT
+    gmx grompp -f ../_params/nvt.mdp -c 1_EM/em.gro -r 1_EM/em.gro -p 0_input/topol.top -o 2_NVT/nvt.tpr
+    mpirun -np 64 gmx_mpi mdrun -v -deffnm 2_NVT/nvt
+    echo "17" | gmx energy -f 2_NVT/nvt.edr -o 2_NVT/temperature.xvg
+
+    ##### NPT
+    gmx grompp -f ../_params/npt.mdp -c 2_NVT/nvt.gro -r 2_NVT/nvt.gro -t 2_NVT/nvt.cpt -p 0_input/topol.top -o 3_NPT/npt.tpr
+    mpirun -np 64 gmx_mpi mdrun -v -deffnm 3_NPT/npt
+    echo "19" | gmx energy -f 3_NPT/npt.edr -o 3_NPT/pressure.xvg
+    echo "25" | gmx energy -f 3_NPT/npt.edr -o 3_NPT/density.xvg
+
+    ############################################################################ MD
+    ##### TPR preparation
+    gmx grompp -f ../_params/md.mdp -c 3_NPT/npt.gro -t 3_NPT/npt.cpt -p 0_input/topol.top -o 4_MD/md_plain.tpr
+
+    cd ..
+done
