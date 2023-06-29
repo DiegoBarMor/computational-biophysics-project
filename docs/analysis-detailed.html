@@ -54,6 +54,10 @@
               <figcaption class="text-center">Hierarchical clustering. Clusters are represented by different colors.</figcaption>
             </figure>
 
+            <p>
+              Using the same default parameter <code>t_value = 900</code>, the <code>rep0</code> for the four trajectories was inspected in search for possible interesting clusters. At this value, <code>mt1</code> gets fragmentated into many clusters, while <code>wt1</code> and <code>wt2</code> are so uniform that their clusters are similar and not very insightful. On the other hand, <code>mt2</code> has a well defined cluster at the end of the trajectory, which gives the impresion that the trajectory might be undergoing a change of conformation near frame 5500.
+            </p>
+
             <figure>
               <img src="animations/clusters_1.gif", alt="animations/clusters_1.gif">
               <figcaption class="text-center">Clusters for different values of the parameter t are represented. For lower values of t the number of cluster increases.</figcaption>
@@ -80,6 +84,14 @@
               <figcaption class="text-center">PCA. Left) Frames projected on the 3 principal components. Right) Covariance between the components.</figcaption>
             </figure>
 
+            <p>
+              As hierarchical clustering showed that <code>mt2</code> has an interesting clustering, we focus on how the frames of this trajectory cluster when performing PCA. Effectively, the frames conforming the cluster of interest for the hierarchical method also have an interesting behavior under PCA. We can observe that most frames cluster together in an ordered manner, representing similarity in their configuration, while frames after 5000 are highly spread.
+
+            </p>
+            <p>
+                This observation complements hierarchical clustering, by hinting that, even though the final frames can be placed under a same cluster because they differ significantly from the rest, the final frames differ also amongst themselves. This can also be confirmed when observing the animation for the higlighted clustering plot. We conclude that there might be some sort of transition happening during these frames.
+            </p>
+
             <figure>
               <img src="animations/pca.gif", alt="animations/pca.gif">
               <figcaption class="text-center">PCA for mt2. Left) Points corresponding to the final frames behave significantly different under this projection. Right) Each row of the covariance matrix can be examined at a time.</figcaption>
@@ -90,13 +102,62 @@
             </p>
 
 
-        <h2>DCMD</h2>
+        <h2>Dynamic Contact Map Differences (DCMD)</h2>
           <p>
-            TODO
+            We want to investigate the <code>mt2_rep0</code> trajectory to understand what kind of behaviour it has between frames 5000 and 6000, specifically to test the idea that there might be some sort of conformational change. A reasonable approach would be to compare the contact maps of different frames over this time period, which we can implement by following the same philosophy of adding an additional "interactive" dimension to the plots. This is the principle behind what we call <b>Dynamic Contact Map (DCMAP)</b>.
           </p>
 
+          <figure>
+            <img src="animations/dcmap.gif", alt="animations/dcmap.gif">
+            <figcaption class="text-center">DCMAP matrix. Each point represents the distance between residues $i$ and $j$ at a given frame.</figcaption>
+          </figure>
 
-        <h2>VMD</h2>
+          <p>
+            We can observe that this is not very insightful, as the patterns from the CMAP matrix are similar throughout the trajectory. However, what we can do is <b>compare</b> the difference between the CMAP at two frames $f0$ and $f1$. The idea is that if there is some conformational change in a specific part of the protein between $f0$ and $f1$, the affected zone will be highlighted in the plot because the difference in its CMAP values will be significant. We refer to this as the <b>Dynamic Contact Map Differences (DCMD)</b> approach.
+          </p>
+
+          <figure>
+            <img src="animations/dcmd_2frames.gif", alt="animations/dcmd_2frames.gif">
+            <figcaption class="text-center">DCMD matrix. Each point represents the difference of distance between residues $i$ and $j$ at frames $f0$ and $f1$.</figcaption>
+          </figure>
+
+          <p>
+            After some inspection, we can immediatly spot a high difference in CMAP values for residues 200-300 and 500-600 through several frames. We pinpointed the frame 5510 as the epicenter of this behaviour, having high differences with frames preceding (up to 5472) and succeding (up to 5692) it. Note however that there is no significant CMAP difference between the frames 5472 and 5692 themselves.
+          </p>
+
+          <figure>
+            <div class="line">
+              <button class="btn btn-primary my-1" onclick="imageChange('cmap_diff','figures/cmap/mt2_f5472_f5510.png')">5472-5510</button>
+              <button class="btn btn-primary my-1" onclick="imageChange('cmap_diff','figures/cmap/mt2_f5510_f5692.png')">5510-5692</button>
+              <button class="btn btn-primary my-1" onclick="imageChange('cmap_diff','figures/cmap/mt2_f5472_f5692.png')">5472-5692</button>
+            </div>
+            <img class="image fig_rw50" src="figures/cmap/mt2_f5472_f5510.png" name="cmap_diff", alt="cmap/mt1.png">
+            <figcaption class="text-center">CMAP Differences matrices. The frame 5510 is of interest.</figcaption>
+          </figure>
+
+          <p>
+            In fact, around frame 5510 is where the RMSD values abruptly change and the "final frames" cluster starts, which complements the observations from DCMD. Similarly, if we recall the comparison between RMSF values of <code>mt2</code> and <code>wt2</code>, we see two very high peaks between residues 289-312 and near 590-600 that are present in <code>mt2</code> and abscent in <code>wt2</code>, which also concides with some of the residues of interest spotted by DCMD.
+          </p>
+
+          <figure>
+            <img src="figures/rmsf/mt2_wt2.png", alt="figures/rmsf/mt2_wt2.png">
+            <figcaption class="text-center">Comparison of RMSF values between <code>mt2</code> and <code>wt2</code>.</figcaption>
+          </figure>
+
+          <p>
+            With these evidences, we can infer that a small conformational change starts around frame 5472 and ends around frame 5692, having its most unique configuration near frame 5510. However, the conformations before frame 5472 and after frame 5692 are still somewhat similar, which suggests that this "conformational change" is some sort of temporary unstable transition conformation, that however leaves some repercusion after returning to its more stable configuration (explaining the change in RMSD values).
+          </p>
+
+          <p>
+            Furthermore, the residues in the ranges 200-300 and 500-600 are involved, which after considering that each subunit has a size of 306, actually means residues between 200-300 in the first subunit and 200-300 in the second subunit. This could imply that the transitory conformational change involves perhaps some way of symmetry. This effect is specially evident near the ends of the subunits. We confirm this insights by observing directly the trajectory at the time and place of interest.
+          </p>
+
+          <figure>
+            <img src="animations/protein_opening.gif", alt="animations/protein_opening.gif">
+            <figcaption class="text-center">Behaviour of the trajectory between frames 5000 and 6000. The protein "opens up" momentarily near frame 5500. The subunits are represented in different colors. Residues between 200-300 and 500-600 are displayed in a semi-transparent overlay.</figcaption>
+          </figure>
+
+        <h2>Active Site</h2>
           <p>
             TODO
           </p>
