@@ -51,8 +51,48 @@
 
 
         <h2>WAD</h2>
-        [TODO]
+          <p>
+            TODO
+          </p>
 
+
+        <h2>Solvent Accessible Surface Area (SASA)</h2>
+          <p>
+            A more quantitative way to investigate the distribution of water molecules around the protein consists in using SASA, a GROMACS tool which computes the solvent accessible surface area. The input file consists in all the non solvent atoms, that is the entire protein. Starting from this input the entire surface of the protein is calculated. From the WAD analysis we noticed that some regions of the protein are hydrophilic and some other are hydrophobic.
+
+            <figure>
+              <img src="figures/sasa/sfe.png", alt="figures/sasa/sfe.png">
+              <figcaption class="text-center">Solvation Free Energy.</figcaption>
+            </figure>
+
+            The solvation free energy is calculated according to the interaction between water molecules and the external residues of the protein at a given time. It is highly noisy, probably due to the water molecules moving quickly each frame and sometimes being closer to hydrophilic or hydrophobic segments of the protein. The solvent accessible surface area calculated next is derived from this solvation free energy.
+
+            <figure>
+              <img src="figures/sasa/area.png", alt="figures/sasa/area.png">
+              <figcaption class="text-center">Surface area accessible by the solvent for each frame.</figcaption>
+            </figure>
+
+            Using SASA, the surface of the protein which is accessible by the solvent for each frame was estimated. It seems that the area is increasing until $100000 ps$ and then it oscillates around a constant value. The noise is again significant, which difficults infering whether the data follows any trend.
+
+            <figure>
+              <img src="figures/sasa/oa.png", alt="figures/sasa/oa.png">
+              <figcaption class="text-center">Average surface area accessible by the solvent for each atom over the trajectory.</figcaption>
+            </figure>
+
+            The aforementioned noise is especially significant in this the case. However, we can observe four atoms with an average surface area of above $0.4 nm^2$ (atoms 704, 705, 5383, 5384). All four atoms correspond to terminal oxygens for glutamine groups. This aminoacid is large and very hydrophilic, so it makes sense that they tend to be in the exterior in contact with water.
+
+            <figure>
+              <img src="figures/sasa/or.png", alt="figures/sasa/or.png">
+              <figcaption class="text-center">Average surface area accessible by the solvent for each residue over the trajectory.</figcaption>
+            </figure>
+
+            A similar behaviour can be seen in the area per residue over the trajectory. We observe that there are two residues with an average surface area higher than $2 nm^2$, namely residues $222$ and $154$. These correspond to arginine and tyrosine respectively, which are again large and hydrophilic groups, with the difference that their overall polar area is even higher than glutamine, which explains why these points overcome the glutamine residues observed before.
+
+            <figure>
+              <img src="figures/sasa/volume.png", alt="figures/sasa/volume.png">
+              <figcaption class="text-center">Left) Volume enclosed by the surface area in each frame. Right) Their respective density. Similarly to the previous cases, they are very noisy, so we can not make any assumptions on the trend.</figcaption>
+            </figure>
+          </p>
 
       </div>
     </body>

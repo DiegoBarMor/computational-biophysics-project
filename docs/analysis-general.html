@@ -11,14 +11,11 @@
       <script type="text/javascript" async
         src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
       </script>
+      <script>
+        function imageChange(img, src){ document.querySelector(".image[name='" + img + "']").src = src; }
+      </script>
     </head>
     <body>
-      <script>
-        function imageChange(img, src){
-          var image = document.querySelector(".image[name='" + img + "']");
-          image.src = src;
-        }
-      </script>
       <nav class="navbar">
         <div class="line">
           <a class="btn" href="https://diegobarmor.github.io/computational-biophysics-project/index.html">Index</a>
