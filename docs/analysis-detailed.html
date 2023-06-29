@@ -12,6 +12,12 @@
       </script>
     </head>
     <body>
+      <script>
+        function imageChange(img, src){
+          var image = document.querySelector(".image[name='" + img + "']");
+          image.src = src;
+        }
+      </script>
       <nav class="navbar">
         <div class="line">
           <a class="btn" href="https://diegobarmor.github.io/computational-biophysics-project/index.html">Index</a>
@@ -26,16 +32,95 @@
       </nav>
 
       <div class="contents"> <h1>Detailed Analysis</h1>
+        <p>
+          In this section, we aimed to deepen the analysis of some trajectory of interest. With hierarchical clustering and PCA of the trajectories' RMSD values, we find an interesting behaviour in <code>mt2_rep0</code>. For better understanding this phenomenon, we introduce a specialized version of the contact map analysis, abbreviated DCMD, were we calculate the difference between the contact map of different. We observe an interesting result at frame ~5500, which we then check in VMD and find out it is caused by the protein "opening up" momentarily. From the evolution in VMD we also noticed that the active site gets "closed" near the end of the trajectory, probably because of the mutation. We compared with the evolution of the wild type and we noticed that in this case the active site does not behave in this way.
+        </p>
 
-        <h2>[TODO]</h2>
+        <h2>Unsupervised Clustering</h2>
           <p>
-            (...)
+            In the general analysis section we calculated the RMSD for the trajectories. The RMSD is only an indicator of the stability of the protein, then considering only this parameter we cannot be sure that system is at equilibrium. To have a better insight of the possible configuration changes we use the hierarchical clustering method. With this procedure we aim to identify clusters for each frame, where each cluster collects the frames particularly near to each other (in terms of RMSD). We set the clustering linkage method as <b>ward</b> and the labelling criterion as <b>distance</b>.
+          </p>
+
+          <h3>Hierarchical Clustering</h3>
+            <p>
+              We begin the clustering analysis by introducing clusters to the RMSD calculated in the previous section. Hopefully, the points belonging to the same cluster represent configurations near to each other. To decide which frames are near it is necessary to introduce a threshold, on the difference between two RMSD values. This is given by the <code>t_value</code> of the clustering method. However, in the plot we notice that the points belonging to the same cluster are not necessary subsequent values of the RMSD.
+            </p>
+
+            <figure>
+              <div class="line">
+                <button class="btn btn-primary my-1" onclick="imageChange('clustering','figures/clustering/mt1r0.png')">mt1</button>
+                <button class="btn btn-primary my-1" onclick="imageChange('clustering','figures/clustering/wt1r0.png')">wt1</button>
+                <button class="btn btn-primary my-1" onclick="imageChange('clustering','figures/clustering/mt2r0.png')">mt2</button>
+                <button class="btn btn-primary my-1" onclick="imageChange('clustering','figures/clustering/wt2r0.png')">wt2</button>
+              </div>
+              <img class="image" src="figures/clustering/mt1r0.png" name="clustering", alt="clustering/mt1r0.png">
+              <figcaption class="text-center">Hierarchical clustering. Clusters are represented by different colors.</figcaption>
+            </figure>
+
+            <figure>
+              <img src="animations/clusters_1.gif", alt="animations/clusters_1.gif">
+              <figcaption class="text-center">Clusters for different values of the parameter t are represented. For lower values of t the number of cluster increases.</figcaption>
+            </figure>
+
+            <figure>
+              <img src="animations/clusters_2.gif", alt="animations/clusters_2.gif">
+              <figcaption class="text-center">By highlighting the cluster of the current reference frame, we notice members of the clusters can be in unexpected places. For example, some points belonging to the yellow cluster lie in the first part of the trajectory while the great majority of them is at the end of the trajectory.</figcaption>
+            </figure>
+
+          <h3>Principal Component Analysis (PCA)</h3>
+            <p>
+              The trajectories under study consist in a large number of particles and frames. Dealing with many degrees of freedom is challenging, so dimensionality reduction techniques such as PCA prove to be useful. These allows us to represent the system in a more comprensible way, which helps to understand how the datapoints (in our case, the frames) are distributed. Having said this, we applied PCA to the RMSD values to observe possible clusters in this other way.
+            </p>
+
+            <figure>
+              <div class="line">
+                <button class="btn btn-primary my-1" onclick="imageChange('pca','figures/pca/mt1.png')">mt1</button>
+                <button class="btn btn-primary my-1" onclick="imageChange('pca','figures/pca/wt1.png')">wt1</button>
+                <button class="btn btn-primary my-1" onclick="imageChange('pca','figures/pca/mt2.png')">mt2</button>
+                <button class="btn btn-primary my-1" onclick="imageChange('pca','figures/pca/wt2.png')">wt2</button>
+              </div>
+              <img class="image" src="figures/pca/mt1.png" name="pca", alt="pca/mt1.png">
+              <figcaption class="text-center">PCA. Left) Frames projected on the 3 principal components. Right) Covariance between the components.</figcaption>
+            </figure>
+
+            <figure>
+              <img src="animations/pca.gif", alt="animations/pca.gif">
+              <figcaption class="text-center">PCA for mt2. Left) Points corresponding to the final frames behave significantly different under this projection. Right) Each row of the covariance matrix can be examined at a time.</figcaption>
+            </figure>
+
+            <p>
+              In the plots on the left, clusters for the trajectory under study can be found by projecting its frames into the most important components. In some cases a distinct separation of some data points is evident, namely <code>mt1</code> and <code>mt2</code>. The plots on the right represent the covariance between the components. Similar to other dynamic plots presented before, a single row of the covariance matrix can be observed at a time by using the slider.
+            </p>
+
+
+        <h2>DCMD</h2>
+          <p>
+            TODO
+          </p>
+
+
+        <h2>VMD</h2>
+          <p>
+            TODO
           </p>
 
 
         <h2>Pyinteraph</h2>
           <p>
-            We have observed that during the trajectory, around frame 5000, the lower part of the protein enhances and at the same time the upper part moves too. We wondered if there are some correlations between these fluctuations, in particular we wanted to explore in detail what kind of interaction occurs between the residues involved. We adressed this problem by means of Pyinteraph.
+            We have observed that during the trajectory,around frame 5000, the lower part of the protein enlarges and at the same time the upper part moves too. We wondered if there are some correlations between these fluctuations, in particular we wanted to explore in detail what kind of interaction occurs between the residues involved. We adressed this problem by means of Pyinteraph, a software designed to identify interaction networks.
+          </p>
+
+          <figure>
+            <img src="figures/pyinteraph/sb_hc.png", alt="figures/pyinteraph/sb_hc.png">
+            <figcaption class="text-center">Interactions between pairs of residues. Left) Salt Bridges. Right) Hydrophobic Clusters.</figcaption>
+          </figure>
+
+          <p>
+            This plot portrays the salt bridges and the hydrophobic interactions between couples of residues. Two hydrophobic residues interact if the center of mass of the side chain of the two residues is found within 5 Å. Two charged groups interact if their distance is less than 2.5 Å (salt bridges). In this case the distance between residues is computed as the shortest distance between two of their atoms. Evidently, the interaction matrix for hydrophobic clusters is more populated, as the minimum distance treshold is double than that of salt bridges.
+          </p>
+
+          <p>
+            WIP
           </p>
 
       </div>
