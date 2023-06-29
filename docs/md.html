@@ -39,7 +39,7 @@
               <li>Adding water and ions into the system.</li>
             </ul>
 
-            The workflow changes slightly at the beginning of the process for each system. It is described below:
+            The workflow changes slightly at the beginning of the process for each system, as described below.
 
             <table class="tg">
             <thead><tr>
@@ -105,12 +105,12 @@
 
         <h2>Molecular Dynamics Simulation</h2>
           <p>
-            The outcome of the previous step is provided in this repository, separated in 4 folders inside <code>data_md/</code>. The parameters for the following steps are also provided in <code>data_md/_params/</code>. The source files for the following steps can also be found in <code>src_md/</code>. It is required to set this as the current working directory before attempting to execute any of the scripts.
+            The outcome of the previous step is provided in this <a href="https://github.com/annaPini/CBProject/">repository</a>, separated in 4 folders inside <code>data_md/</code>. The parameters for the following steps are also provided in <code>data_md/_params/</code>. The source files for the following steps can also be found in <code>src_md/</code>. It is required to set this as the current working directory before attempting to execute any of the scripts.
           </p>
 
           <h3>Step 0: Energy Minimization</h3>
             <p>
-              At this point the system is complete but the protein is still in a high energy configuration. Hence it is necessary to find the configuration associated to the minimum value of the energy and then let it evolve. This is known as <b>energy minimization</b>. The protein is allowed to explore many configurations to find the one associated to a minimum value of the molecular energy.
+              At this point, the system is complete but the protein is still in a high energy configuration. Hence it is necessary to find the configuration associated to the minimum value of the energy and then let it evolve. This is known as <b>energy minimization</b>. The protein is allowed to explore many configurations to find the one associated to a minimum value of the molecular energy.
             </p>
 
             <p>
@@ -194,7 +194,7 @@
             </p>
 
             <p>
-              In the two plots below it is shown, as an example, the benchmark performed for the NVT equilibration. It can be easily observed that the nanoseconds in the simulation processed in a day, in $ns/day$, and the efficiency, in $h/ns$ then the hours to perform a nanosecond of simulation,depend on the wall time. It can be also observed that the outcomes obtained for different repetitions are different.
+              In the two plots below it is shown, as an example, the benchmark performed for the NVT equilibration. It can be easily observed that the nanoseconds in the simulation processed in a day, in $ns/day$, and the efficiency, in $h/ns$ (hours to perform a nanosecond of simulation), depend on the wall time. It can be also observed that the outcomes obtained for different repetitions are different.
             </p>
 
             <figure>
@@ -212,7 +212,7 @@
 
             <ul>
               <li>
-                <b>nojump</b>: First of all, the boundary conditions and the diffusive dynamics are removed, by executing the command <code>echo 1 0 | gmx trjconv -s 4_MD/md_plain.tpr -f 4_MD/md_plain.xtc -o md-nojump.xtc -pbc nojump -center</code>. <code>echo 1</code> automatically chooses the protein as centering reference, while <code>echo 0</code> indicates that the whole system should be centered.
+                <b>nojump</b>: First of all, the boundary conditions and the diffusive dynamics are removed, by executing the command <code>echo 1 0 | gmx trjconv -s 4_MD/md_plain.tpr -f 4_MD/md_plain.xtc -o md-nojump.xtc -pbc nojump -center</code>. The piped command <code>echo 1</code> automatically chooses the protein as centering reference, while <code>echo 0</code> indicates that the whole system should be centered.
               </li>
               <li>
                 <b>center</b>: Notably, the solvent molecules diffuse out of the simulation box. To fix this, the command <code>echo 3 0 | gmx trjconv -s 4_MD/md_plain.tpr -f md-nojump.xtc -o md-center.xtc -pbc mol -center</code> is used.

@@ -57,7 +57,7 @@
             After the observations regarding the "active site obstruction" event in the previous sections, we are interested in knowing if the accesibility of the active site by its ligand is indeed affected or not. An intuitive approach is to observe how accesible is the active site to water molecules. Water molecules visits this and other cavities during the trajectory, unless they get obstructed in some way. Therefore, we can keep track of the positions of water molecules through the trajectory, and in this way measure a sort of local density which can hint on the accesibility of water to different spaces of the protein.
           </p>
           <p>
-            We introduce a methodology based in this idea, called <b>Water Average Local Densities</b>. It is divided in three main parts: selection of frames of interest, calculation of local densities, and visualization of results. The script <code>src_analysis/wald.py</code> is to be used for executing the different steps of the pipeline. We follow this workflow for <code>mt2_rep0</code>, so for simplicity all paths will specify this particular run.
+            We introduce a methodology based in this idea, called <b>Water Average Local Densities (WALD    )</b>. It is divided in three main parts: selection of frames of interest, calculation of local densities, and visualization of results. The script <code>src_analysis/wald.py</code> is to be used for executing the different steps of the pipeline. We follow this workflow for <code>mt2_rep0</code>, so for simplicity all paths will specify this particular run.
           </p>
 
           <h3>Step 0: Frames Selection</h3>
@@ -134,7 +134,7 @@
               </figure>
 
               <p>
-                As mentioned at the beginning of this section, we followed the WALD pipeline for reference frames 0 and 5825 of the trajectoy, which represent the common available state and the obstructed state of the active site respectively. We observe that at frames conformationally related to 5825 the active site are indeed less occupied by water molecules, confirming our previous observations. Note however that this result is mostly qualitative (we do have the local density values, but we are just visualizing them).
+                As mentioned at the beginning of this section, we followed the WALD pipeline for reference frames 0 and 5825 of the <code>mt2_rep0</code> trajectoy, which represent the common available state and the obstructed state of the active site respectively. We observe that at frames conformationally related to 5825 the active site are indeed less occupied by water molecules, confirming our previous observations. Note however that this result is mostly qualitative (we do have the local density values, but we are just visualizing them).
               </p>
 
               <figure>
@@ -143,7 +143,7 @@
                   <button class="btn btn-primary my-1" onclick="imageChange('wald_results','figures/wald/wald_5825.png')">frame 5825</button>
                 </div>
                 <img class="image" src="figures/wald/wald_0000.png" name="wald_results", alt="figures/wald/wald_0000.png">
-                <figcaption class="text-center">WIP</figcaption>
+                <figcaption class="text-center">Comparison between water occupancy at the active site between frames 0 and 5825.</figcaption>
               </figure>
 
 
