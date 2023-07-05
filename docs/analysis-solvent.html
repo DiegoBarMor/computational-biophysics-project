@@ -33,7 +33,7 @@
           In the first part of this section we present a brief introduction on water models, in particular the <code>TIP3P</code> model that was employed in our simulation. Then, we introduce a new methodology for analyzing the water distribution around the protein, called WALD. Finally we estimate the accessible surface area with the GROMACS tool SASA.
         </p>
 
-        <h2>Water Model</h2>
+        <h2 id="model">Water Model</h2>
           <p>
             Modelling water is a challenging task and many different models are available. The choice of the water model is determined by
             <ul>
@@ -52,7 +52,7 @@
           </p>
 
 
-        <h2>Water Average Local Densities (WALD)</h2>
+        <h2 id="wald">Water Average Local Densities (WALD)</h2>
           <p>
             After the observations regarding the "active site obstruction" event in the previous sections, we are interested in knowing if the accesibility of the active site by its ligand is indeed affected or not. An intuitive approach is to observe how accesible is the active site to water molecules. Water molecules visit this and other cavities during the trajectory, unless they get obstructed in some way. Therefore, we can keep track of the positions of water molecules through the trajectory, and in this way measure a sort of local density which can hint on the accesibility of water to different spaces of the protein.
           </p>
@@ -146,7 +146,7 @@
               </figure>
 
 
-        <h2>Solvent Accessible Surface Area (SASA)</h2>
+        <h2 id="sasa">Solvent Accessible Surface Area (SASA)</h2>
           <p>
             A quantitative way to investigate the distribution of water molecules around the whole protein consists in using SASA, a GROMACS tool which computes the solvent accessible surface area. The input file consists in all the non solvent atoms, i.e. the entire protein. Starting from this input the entire surface of the protein is calculated.
 

@@ -34,7 +34,7 @@
 
         <h2>Description</h2>
           <p>
-            The focus of this project is to analyse the dynamics of a protease of interest. The software used to simulate the trajectory is <code>GROMACS</code>, which integrates the equations of motion by means of the Velocity Verlet algorithm. Once the trajectories were obtained they were analysed, focusing on general aspects of the trajectories, as well as frames of interest, the active sites and the distribution of water around the protein. The analysis is mostly performed via Python 3 scripts. The library <code>MDAnalysis</code> facilitates dealing with GRO and XTC files, as well as performing different analysis methodologies. Refer to the <a href="https://github.com/annaPini/CBProject/">repository</a> for source code and initial input files necessary to reproduce all the steps detailed by the report.
+            The focus of this project is to analyse the dynamics of a protease of interest. The software used to simulate the trajectory is <code>GROMACS</code>, which integrates the equations of motion by means of the <code>Velocity Verlet</code> algorithm. Once the trajectories were obtained they were analysed, focusing on general aspects of the trajectories, as well as frames of interest, the active sites and the distribution of water around the protein. The analysis is mostly performed via Python 3 scripts. The library <code>MDAnalysis</code> facilitates dealing with GRO and XTC files, as well as performing different analysis methodologies. Refer to the <a href="https://github.com/annaPini/CBProject/">repository</a> for source code and initial input files necessary to reproduce all the steps detailed by the report.
           </p>
 
           <h3>About the figures</h3>
@@ -56,10 +56,40 @@
         <h2>Index</h2>
           <ul>
             <li><a href="https://diegobarmor.github.io/computational-biophysics-project/intro.html">Introduction</a></li>
+            <ul>
+              <li><a href="https://diegobarmor.github.io/computational-biophysics-project/intro.html#system">Physical System</a></li>
+              <li><a href="https://diegobarmor.github.io/computational-biophysics-project/intro.html#md">Molecular Dynamics</a></li>
+              <li><a href="https://diegobarmor.github.io/computational-biophysics-project/intro.html#workflow">Project Structure</a></li>
+            </ul>
             <li><a href="https://diegobarmor.github.io/computational-biophysics-project/md.html">Part 1: Molecular Dynamics</a></li>
+            <ul>
+                <li><a href="https://diegobarmor.github.io/computational-biophysics-project/md.html#input">Input Preparation</a></li>
+                <li><a href="https://diegobarmor.github.io/computational-biophysics-project/md.html#simulation">Molecular Dynamics Simulation</a></li>
+                <li><a href="https://diegobarmor.github.io/computational-biophysics-project/md.html#post">Post Processing</a></li>
+            </ul>
             <li><a href="https://diegobarmor.github.io/computational-biophysics-project/analysis-general.html">Part 2: General Analysis</a></li>
+            <ul>
+              <li><a href="https://diegobarmor.github.io/computational-biophysics-project/analysis-general.html#calc">Calculations</a></li>
+              <li><a href="https://diegobarmor.github.io/computational-biophysics-project/analysis-general.html#rama">Ramachandran Map (RAMA)</a></li>
+              <li><a href="https://diegobarmor.github.io/computational-biophysics-project/analysis-general.html#rmsd">Root Mean Square Deviation (RMSD)</a></li>
+              <li><a href="https://diegobarmor.github.io/computational-biophysics-project/analysis-general.html#rmsf">Root Mean Square Fluctuations (RMSF)</a></li>
+              <li><a href="https://diegobarmor.github.io/computational-biophysics-project/analysis-general.html#rgyr">Radius of Gyration (RGYR)</a></li>
+              <li><a href="https://diegobarmor.github.io/computational-biophysics-project/analysis-general.html#cmap">Contact Map (CMAP)</a></li>
+              <li><a href="https://diegobarmor.github.io/computational-biophysics-project/analysis-general.html#bse">Block Analysis (BSE)</a></li>
+            </ul>
             <li><a href="https://diegobarmor.github.io/computational-biophysics-project/analysis-detailed.html">Part 3: Detailed Analysis</a></li>
+            <ul>
+              <li><a href="https://diegobarmor.github.io/computational-biophysics-project/analysis-detailed.html#clustering">Unsupervised Clustering</a></li>
+              <li><a href="https://diegobarmor.github.io/computational-biophysics-project/analysis-detailed.html#dcmd">Dynamic Contact Map Differences (DCMD)</a></li>
+              <li><a href="https://diegobarmor.github.io/computational-biophysics-project/analysis-detailed.html#active_site">Active Site</a></li>
+              <li><a href="https://diegobarmor.github.io/computational-biophysics-project/analysis-detailed.html#pyinteraph">Pyinteraph</a></li>
+            </ul>
             <li><a href="https://diegobarmor.github.io/computational-biophysics-project/analysis-solvent.html">Part 4: Solvent Analysis</a></li>
+            <ul>
+              <li><a href="https://diegobarmor.github.io/computational-biophysics-project/analysis-solvent.html#model">Water Model</a></li>
+              <li><a href="https://diegobarmor.github.io/computational-biophysics-project/analysis-solvent.html#wald">Water Average Local Densities (WALD)</a></li>
+              <li><a href="https://diegobarmor.github.io/computational-biophysics-project/analysis-solvent.html#sasa">Solvent Accessible Surface Area (SASA)</a></li>
+            </ul>
           </ul>
 
 

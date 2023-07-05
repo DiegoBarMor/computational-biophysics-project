@@ -34,7 +34,7 @@
           The source code for the general, detailed and solvent analysis is found in the folder <code>src_analysis/</code>. It contains scripts for both calculation and visualization of the results, which are to be accessed using the <code>src_analysis/main.py</code> script. Numerical results are stored in a folder created while executing <code>src_md/3_POST.sh</code>, called <code>data_analysis/</code>.
         </p>
 
-        <h2>Calculations</h2>
+        <h2 id="calc">Calculations</h2>
           <p>
             Calculating the different methodologies below can get computationally expensive when dealing with a trajectory of $6000$ frames. For example, the RMSD matrix would consist of $6000 \times 6000$ elements. Firstly, one must consider that large XTC files should be opened as a stream (loading just the frame needed for a given operation) instead of loading all frames in memory. This means that, when calculating the RMSD matrix, the XTC "reading window" must shift from start to finish multiple times to load the required frames, which is highly demanding.
           </p>
@@ -48,7 +48,7 @@
           </p>
 
 
-        <h2>Ramachandran Map (RAMA)</h2>
+        <h2 id="rama">Ramachandran Map (RAMA)</h2>
           <p>
             We compare the theoretical Ramachandran map with the experimental one to check if the protein assumes allowed configurations during its evolution. From the plots below we notice that the great majority of the points falls into the gray region, meaning that the protein assumes allowed configurations. Few points fall in the black region, but this could correspond to unstable configurations, in which the protein is moving to a more stable configuration.
 
@@ -70,7 +70,7 @@
           </p>
 
 
-        <h2>Root Mean Square Deviation (RMSD)</h2>
+        <h2 id="rmsd">Root Mean Square Deviation (RMSD)</h2>
           <p>
             From the trajectories visualized in VMD it can be seen how the protein fluctuates during its evolution in water. The first frame, which is the PDB file taken from crystallographic experiments, represents the protein in a structure far from equilibrium. During its evolution, the system should move towards a minimum of the free energy, and reach more stable configurations. We wonder if the system reaches an equilibrium configuration, and if there are some transitions from a metastable configuration to another. To explore this behaviour we can calculate the <b>root mean square deviation (RMSD)</b> for each trajectory. The RMSD between two frames is defined as
 
@@ -180,7 +180,7 @@
               </p>
 
 
-        <h2>Root Mean Square Fluctuations (RMSF)</h2>
+        <h2 id="rmsf">Root Mean Square Fluctuations (RMSF)</h2>
           <p>
               The protein is composed of many atoms which move during the evolution of the system. To understand which parts of the protein are more mobile it is useful to calculate the <b>root mean square fluctuations (RMSF)</b> for each atom.
               The RMSF related to atom $i$ is defined as:
@@ -227,7 +227,7 @@
             </p>
 
 
-        <h2>Radius of Gyration (RGYR)</h2>
+        <h2 id="rgyr">Radius of Gyration (RGYR)</h2>
           <p>
             From VMD it can be observed that even though the protein fluctuates, its shape remains constant. To check if the protein "elongates" during its evolution it is useful to calculate the radius of gyration:
 
@@ -279,7 +279,7 @@
           </ul>
 
 
-        <h2>Contact Map (CMAP)</h2>
+        <h2 id="cmap">Contact Map (CMAP)</h2>
           <p>
             The protein is constituted by a folded chain composed of atoms linked together. Non subsequent atoms can be near enough to interact even if they are not adjacent. We can observe the distance between two atoms for having an idea on whether they interact with each other. The <b>contact maps (CMAPs)</b> show the distance between atoms for a single frame.
           </p>
@@ -304,7 +304,7 @@
           </p>
 
 
-        <h2>Block Analysis (BSE)</h2>
+        <h2 id="bse">Block Analysis (BSE)</h2>
           <p>
             During this first part of the analysis we sought to understand whether the system has reached equilibrium during the simulation, but the variables we observed only gave us some indications. Looking at the RMSD, one of the most important indicators of equilibrium, we noticed that its values had an approximately constant trend toward the end even if many fluctuations were present.
           </p>

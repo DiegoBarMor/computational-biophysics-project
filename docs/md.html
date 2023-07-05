@@ -30,7 +30,7 @@
 
       <div class="contents"> <h1>Molecular Dynamics</h1>
 
-        <h2>Input preparation</h2>
+        <h2 id="input">Input preparation</h2>
           <p>
             The original PDB files for both <a href="https://www.rcsb.org/structure/8DFN">mutated</a> and <a href="https://www.rcsb.org/structure/7SI9">wild</a> types were obtained from the PDB website. The chosen PDB wild-type entry contained an additional ligand, which was manually removed from the file. These two PDB structures were then given as input to the <code>Input Generator</code> tool from <a href="www.charmm-gui.org">Charmm-gui</a>. This tool produces the input files for the different simulations, namely by:
 
@@ -103,7 +103,7 @@
           </p>
 
 
-        <h2>Molecular Dynamics Simulation</h2>
+        <h2 id="simulation">Molecular Dynamics Simulation</h2>
           <p>
             The outcome of the previous step is provided in this <a href="https://github.com/annaPini/CBProject/">repository</a>, separated in 4 folders inside <code>data_md/</code>. The parameters for the following steps are also provided in <code>data_md/_params/</code>. The source files for the following steps can also be found in <code>src_md/</code>. It is required to set this as the current working directory before attempting to execute any of the scripts.
           </p>
@@ -206,7 +206,8 @@
               <figcaption class="text-center">Post processing steps of the trajectory.</figcaption>
             </figure>
 
-        <h2>Post processing</h2>
+
+        <h2 id="post">Post processing</h2>
           <p>
             If the resulting <code>md_plain.xtc</code> trajectories are observed, it is evident that they need further processing before analysing them. The script <code>3_POST.sh</code> is provided to deal with this.
 

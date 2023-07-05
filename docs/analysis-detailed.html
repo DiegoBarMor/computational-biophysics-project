@@ -33,7 +33,7 @@
           In this section, we aimed to deepen the analysis of some trajectory of interest. With hierarchical clustering and PCA of the trajectories' RMSD values, we find an interesting behaviour in <code>mt2_rep0</code>. For better understanding this phenomenon, we introduce a specialized version of the contact map analysis, abbreviated DCMD, were we calculate the difference between the contact map of different frames. We observe an interesting result around frame 5500, which we then check in VMD and find out it is caused by the protein "opening up" momentarily. From the evolution in VMD we also noticed that the active site gets "obstructed" near the end of the trajectory.
         </p>
 
-        <h2>Unsupervised Clustering</h2>
+        <h2 id="clustering">Unsupervised Clustering</h2>
           <p>
             In the general analysis section we calculated the RMSD for the trajectories. The RMSD is only an indicator of the stability of the protein, so considering only this parameter we cannot be sure that system is at equilibrium. To have a better insight of the possible configuration changes we use the <b>hierarchical clustering</b> method. With this procedure we aim to identify clusters for each frame, where each cluster collects the frames particularly near to each other (in terms of RMSD). We set the clustering linkage method as <b>ward</b> and the labelling criterion as <b>distance</b>.
           </p>
@@ -102,7 +102,7 @@
             </p>
 
 
-        <h2>Dynamic Contact Map Differences (DCMD)</h2>
+        <h2 id="dcmd">Dynamic Contact Map Differences (DCMD)</h2>
           <p>
             We want to investigate the <code>mt2_rep0</code> trajectory to understand what kind of behaviour it has between frames 5000 and 6000, specifically to test the idea that there might be some sort of conformational change. A reasonable approach would be to compare the contact maps of different frames over this time period, which we can implement by following the same philosophy of adding an additional "interactive" dimension to the plots. This is the principle behind what we call <b>Dynamic Contact Map (DCMAP)</b>.
           </p>
@@ -158,7 +158,7 @@
           </figure>
 
 
-        <h2>Active Site</h2>
+        <h2 id="active_site">Active Site</h2>
           <h3>Covering of the Active Site</h3>
             <p>
               In the previous animation, we can observe that one end of the green subunit is moving around freely, but after the "opening up" event it starts to interact with some residues in the purple subunit. We further explored this interaction, and noticed that the interacting residues of the latter subunit were actually very close to its active site.
@@ -199,7 +199,8 @@
               <figcaption class="text-center">Average contact between labelled atoms in the active site. For systems with two subunits, a data point is obtained for each subunit, identified here with the suffix <code>as0</code> or <code>as1</code> respectively. Left) <code>rep0</code> for all systems. Right) <code>rep1</code> for all systems.</figcaption>
             </figure>
 
-        <h2>Pyinteraph</h2>
+
+        <h2 id="pyinteraph">Pyinteraph</h2>
           <p>
             We wondered if there are some correlations between the "opening up" and "active site obstruction" events described before. In particular we wanted to further explore what kind of interaction occurs between the residues involved. For adressing this, we briefly refered to <code>Pyinteraph</code>, a software designed to identify interaction networks. We followed the Pyinteraph workflow to obtain interaction matrices between residues during the <code>met2_rep0</code> trajectory.
           </p>
