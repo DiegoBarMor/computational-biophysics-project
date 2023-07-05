@@ -86,7 +86,7 @@
             It is important to remember that this quantity is only an indicator of the stability of the system. If a plateau is reached it means that the protein can be at equilibrium, but it important to notice that this is not always the case. Furthermore, before calculating the RMSD it is necessary to perform an alignment between the structures. In our case, this was performed in the post-processing step.
           </p>
 
-          <h3>RMSD visualization - 1D</h3>
+          <h3 id="rmsd1d">RMSD visualization - 1D</h3>
             <p>
               A frame from the trajectory can be taken as a reference point for the RMSD with other frames, as a means of general comparison between conformations and their evolution. By taking the respective row from the RMSD matrix, a fixed 1D representation can be obtained. The classes <code>visualizations.Plotter_RMSD_1D</code> and <code>visualizations.Plotter_RMSD_1D_Compare</code> were defined with this purpose in mind (the latter allows for plotting two RMSD lines simultaneously).
             </p>
@@ -136,7 +136,7 @@
               </p>
 
 
-          <h3>RMSD visualization - 2D</h3>
+          <h3 id="rmsd2d">RMSD visualization - 2D</h3>
             <p>
               It is also possible to represent the RMSD matrix using a heatmap. Recalling that the static RMSD plots presented in the previous section correspond to the first row in the respective matrix, this plotting method can give a  broader idea of the behaviour of the system. These matrices are symmetric, and the values on the diagonal are $0$ (by definition).
 
@@ -176,7 +176,7 @@
               </p>
 
               <p>
-                The initial velocities are different for the two repetitions of the same simulation since they are randomly taken from a Maxwell-Boltzmann distribution at fixed temperature. We also noticed that after the energy minimisation step the positions of the heavy atoms change and the same happens after the following steps (NVT, NPT euilibration). Perhaps these small deviations in the initial conditions (GRO file used for the unrestrained MD) influence the trajectory in a significant way, specially for the systems with one subunit.
+                The initial velocities are different for the two repetitions of the same simulation since they are randomly taken from a Maxwell-Boltzmann distribution at fixed temperature. We also noticed that after the energy minimisation step the positions of the heavy atoms change and the same happens after the following steps (NVT, NPT equilibration). Perhaps these small deviations in the initial conditions (GRO file used for the unrestrained MD) influence the trajectory in a significant way, specially for the systems with one subunit.
               </p>
 
 
