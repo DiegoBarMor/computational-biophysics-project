@@ -59,11 +59,11 @@
             <p>
               This is the algorithm employed in our simulation. The main difference between this algorithm and the Verlet is that the positions and velocities are updated at the same time. The starting point is the Taylor expansion truncated to the second order:
 
-              $$ \vec{r}_{i} (t+ \Delta t) = \vec{r}_{i}(t) + \vec{\dot{r}}_{i}(t) \Delta t + \frac{(\Delta t)^{2}}{2m_{i}}\vec{F}_{i}(t). \label{vv_1}$$
+              $$ \vec{r}_{i} (t + \Delta t) = \vec{r}_{i}(t) + \vec{\dot{r}}_{i}(t) \Delta t + \frac{(\Delta t)^{2}}{2m_{i}}\vec{F}_{i}(t). \label{vv_1}$$
 
               Due to the time reversibility, which is guaranteed by the Hamiltonian formalism, it is possible to write
 
-              $$ \vec{r}_{i} (t) = \vec{r}_{i}(t+\Delta t) + \vec{\dot{r}}_{i}(t+\Delta t) \Delta t + \frac{(\Delta t)^{2}}{2m_{i}}\vec{F}_{i}(t + \Delta t). \label{vv_2}$$
+              $$ \vec{r}_{i} (t) = \vec{r}_{i}(t+\Delta t) - \vec{\dot{r}}_{i}(t+\Delta t) \Delta t + \frac{(\Delta t)^{2}}{2m_{i}}\vec{F}_{i}(t + \Delta t). \label{vv_2}$$
 
               If $\vec{r}_{i} (t+ \Delta t) $ in \eqref{vv_1} is substituted in \eqref{vv_2} the following relation is obtained:
 
