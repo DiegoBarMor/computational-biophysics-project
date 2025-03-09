@@ -2,9 +2,7 @@
   <html>
     <head>
       <title>CBP Solvent Analysis</title>
-
-      <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
-      <link rel="stylesheet" href="https://raw.githack.com/DiegoBarMor/DiegoBarMor.github.io/refs/heads/main/docs/prisma.css">
+      <link rel="stylesheet" href="https://raw.githack.com/DiegoBarMor/chocomint-css/main/chocomint.min.css">
       <link rel="stylesheet" type="text/css" href=style.css>
 
       <script type = "text/x-mathjax-config">
@@ -19,23 +17,34 @@
     </head>
 
     <body>
-      <nav>
-        <div class="nav-container">
-          <a href="https://diegobarmor.github.io/">
-            <img class="nav-icon" src="https://diegobarmor.github.io/icons/home.png" alt="Icon">
-          </a>
-          <div class="nav-buttons">
+      <header class="dynamic-navbar" id="navbar">
+        <nav class="chocomint-nav-container">
+          <abbr title="Home DiegoBarMor"><a href="https://diegobarmor.github.io/">
+              <img class="icon-neon" src="https://raw.githack.com/DiegoBarMor/chocomint-css/main/icons/home.png" alt="Icon">
+            </a></abbr>
+          <abbr title="Toggle BG Particles">
+            <img class="icon-neon" src="https://raw.githack.com/DiegoBarMor/chocomint-css/main/icons/particles.png" alt="Icon" onclick="toggle_particles()">
+          </abbr>
+          <abbr title="Toggle Theme">
+            <img class="icon-neon" src="https://raw.githack.com/DiegoBarMor/chocomint-css/main/icons/theme.png" alt="Icon" onclick="toggle_theme()">
+          </abbr>
+          <div class="chocomint-nav-buttons">
             <a class="button" href="https://diegobarmor.github.io/computational-biophysics-project/index.html">Index</a>
-            <a class="button" href="https://diegobarmor.github.io/computational-biophysics-project/intro.html">Introduction</a>
-            <a class="button" href="https://diegobarmor.github.io/computational-biophysics-project/md.html">Molecular Dynamics</a>
-            <a class="button" href="https://diegobarmor.github.io/computational-biophysics-project/analysis-general.html">General Analysis</a>
-            <a class="button" href="https://diegobarmor.github.io/computational-biophysics-project/analysis-detailed.html">Detailed Analysis</a>
-            <a class="button" href="https://diegobarmor.github.io/computational-biophysics-project/analysis-solvent.html">Solvent Analysis</a>
+            <select id="page-select">
+              <optgroup label="Section">
+                <option value="intro">Introduction</option>
+                <option value="md">Molecular Dynamics</option>
+                <option value="analysis-general">General Analysis</option>
+                <option value="analysis-detailed">Detailed Analysis</option>
+                <option value="analysis-solvent">Solvent Analysis</option>
+              </optgroup>
+            </select>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </header>
 
-      <div class="contents"> <h1>Solvent Analysis</h1>
+      <main id="main">
+        <h1>Solvent Analysis</h1>
         <p>
           In the first part of this section we present a brief introduction on water models, in particular the <code>TIP3P</code> model that was employed in our simulation. Then, we introduce a new methodology for analyzing the water distribution around the protein, called WALD. Finally we estimate the accessible surface area with the GROMACS tool SASA.
         </p>
@@ -192,6 +201,13 @@
           </p>
 
 
-      </div>
+      </main>
+
+      <div id="bg-animation-container"></div>
+
     </body>
-  </html>
+
+    <script src="https://raw.githack.com/DiegoBarMor/chocomint-css/main/chocomint.min.js"></script>
+    <script src="navbar.js"></script>
+
+</html>
